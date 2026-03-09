@@ -30,7 +30,8 @@ async function main() {
   const runsDir = join(__dirname, "..", "runs");
   const resultsDir = join(__dirname, "..", "results");
 
-  const agents = new Map<string, { scores: Judgment[]; tasks: number }>();
+  const agents = new Map<string, { scores: Judgment[]; taskIds: Set<string> }>();
+  const allTaskIds = new Set<string>();
 
   // Scan all run directories
   const dates = await readdir(runsDir).catch(() => []);
@@ -41,6 +42,8 @@ async function main() {
 
     for (const task of tasks) {
       if (task.startsWith(".")) continue;
+      const taskId = `${date}/${task}`;
+      allTaskIds.add(taskId);
       const judgmentsPath = join(datePath, task, "judgments");
       // judgments/<agent>/<judge>.json
       const agentDirs = await readdir(judgmentsPath).catch(() => []);
@@ -56,11 +59,11 @@ async function main() {
           const judgment: Judgment = JSON.parse(content);
 
           if (!agents.has(agentName)) {
-            agents.set(agentName, { scores: [], tasks: 0 });
+            agents.set(agentName, { scores: [], taskIds: new Set() });
           }
           const entry = agents.get(agentName)!;
           entry.scores.push(judgment);
-          entry.tasks++;
+          entry.taskIds.add(taskId);
         }
       }
     }
@@ -75,7 +78,7 @@ async function main() {
 
     leaderboard.push({
       agent,
-      tasks: data.tasks,
+      tasks: data.taskIds.size,
       correctness: Math.round(avg("correctness") * 100) / 100,
       code_quality: Math.round(avg("code_quality") * 100) / 100,
       robustness: Math.round(avg("robustness") * 100) / 100,
@@ -91,7 +94,7 @@ async function main() {
   // Assign ranks
   const result = {
     updated: new Date().toISOString().split("T")[0],
-    tasks_evaluated: Math.max(...leaderboard.map((a) => a.tasks)),
+    tasks_evaluated: allTaskIds.size,
     leaderboard: leaderboard.map((entry, i) => ({
       rank: i + 1,
       ...entry,
