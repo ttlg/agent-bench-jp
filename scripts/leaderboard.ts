@@ -42,20 +42,26 @@ async function main() {
     for (const task of tasks) {
       if (task.startsWith(".")) continue;
       const judgmentsPath = join(datePath, task, "judgments");
-      const files = await readdir(judgmentsPath).catch(() => []);
+      // judgments/<agent>/<judge>.json
+      const agentDirs = await readdir(judgmentsPath).catch(() => []);
 
-      for (const file of files) {
-        if (!file.endsWith(".json")) continue;
-        const agentName = file.replace(".json", "");
-        const content = await readFile(join(judgmentsPath, file), "utf-8");
-        const judgment: Judgment = JSON.parse(content);
+      for (const agentName of agentDirs) {
+        if (agentName.startsWith(".")) continue;
+        const agentJudgmentsPath = join(judgmentsPath, agentName);
+        const judgeFiles = await readdir(agentJudgmentsPath).catch(() => []);
 
-        if (!agents.has(agentName)) {
-          agents.set(agentName, { scores: [], tasks: 0 });
+        for (const file of judgeFiles) {
+          if (!file.endsWith(".json")) continue;
+          const content = await readFile(join(agentJudgmentsPath, file), "utf-8");
+          const judgment: Judgment = JSON.parse(content);
+
+          if (!agents.has(agentName)) {
+            agents.set(agentName, { scores: [], tasks: 0 });
+          }
+          const entry = agents.get(agentName)!;
+          entry.scores.push(judgment);
+          entry.tasks++;
         }
-        const entry = agents.get(agentName)!;
-        entry.scores.push(judgment);
-        entry.tasks++;
       }
     }
   }
