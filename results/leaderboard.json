@@ -1,11 +1,7 @@
 {
   "updated": "2026-03-09",
   "tasks_evaluated": 1,
-  "judges": [
-    "claude-code",
-    "codex"
-  ],
-  "leaderboard": [
+  "overall": [
     {
       "rank": 1,
       "agent": "codex",
@@ -27,6 +23,39 @@
       "design": 3.5,
       "comprehension": 4,
       "total": 18.5
+    }
+  ],
+  "tasks": [
+    {
+      "taskId": "2026-03-10/001-cli-tool",
+      "judges": [
+        "claude-code",
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "codex",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4.5,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22.5
+          }
+        },
+        {
+          "agent": "claude-code",
+          "scores": {
+            "correctness": 3.5,
+            "code_quality": 4,
+            "robustness": 3.5,
+            "design": 3.5,
+            "comprehension": 4,
+            "total": 18.5
+          }
+        }
+      ]
     }
   ]
 }
