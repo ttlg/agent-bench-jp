@@ -32,6 +32,7 @@ async function main() {
 
   const agents = new Map<string, { scores: Judgment[]; taskIds: Set<string> }>();
   const allTaskIds = new Set<string>();
+  const allJudges = new Set<string>();
 
   // Scan all run directories
   const dates = await readdir(runsDir).catch(() => []);
@@ -55,6 +56,8 @@ async function main() {
 
         for (const file of judgeFiles) {
           if (!file.endsWith(".json")) continue;
+          const judgeName = file.replace(".json", "");
+          allJudges.add(judgeName);
           const content = await readFile(join(agentJudgmentsPath, file), "utf-8");
           const judgment: Judgment = JSON.parse(content);
 
@@ -95,6 +98,7 @@ async function main() {
   const result = {
     updated: new Date().toISOString().split("T")[0],
     tasks_evaluated: allTaskIds.size,
+    judges: [...allJudges].sort(),
     leaderboard: leaderboard.map((entry, i) => ({
       rank: i + 1,
       ...entry,
@@ -121,7 +125,7 @@ async function main() {
     );
   }
   console.log(
-    `\n*Updated: ${result.updated}, ${result.tasks_evaluated} task(s) evaluated.*\n`
+    `\n*Updated: ${result.updated}, ${result.tasks_evaluated} task(s) evaluated. Judges: ${result.judges.join(", ")}.*\n`
   );
 }
 
