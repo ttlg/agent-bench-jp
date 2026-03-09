@@ -1,11 +1,11 @@
 {
   "updated": "2026-03-09",
-  "tasks_evaluated": 2,
+  "tasks_evaluated": 1,
   "leaderboard": [
     {
       "rank": 1,
       "agent": "codex",
-      "tasks": 2,
+      "tasks": 1,
       "correctness": 5,
       "code_quality": 4.5,
       "robustness": 4,
@@ -16,7 +16,7 @@
     {
       "rank": 2,
       "agent": "claude-code",
-      "tasks": 2,
+      "tasks": 1,
       "correctness": 3.5,
       "code_quality": 4,
       "robustness": 3.5,
