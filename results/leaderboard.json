@@ -1,28 +1,28 @@
 {
   "updated": "2026-03-09",
-  "tasks_evaluated": 1,
+  "tasks_evaluated": 2,
   "overall": [
     {
       "rank": 1,
       "agent": "codex",
-      "tasks": 1,
+      "tasks": 2,
       "correctness": 5,
       "code_quality": 4.5,
-      "robustness": 4,
+      "robustness": 4.25,
       "design": 4,
       "comprehension": 5,
-      "total": 22.5
+      "total": 22.75
     },
     {
       "rank": 2,
       "agent": "claude-code",
-      "tasks": 1,
-      "correctness": 3.5,
+      "tasks": 2,
+      "correctness": 4.25,
       "code_quality": 4,
-      "robustness": 3.5,
-      "design": 3.5,
-      "comprehension": 4,
-      "total": 18.5
+      "robustness": 3.75,
+      "design": 3.75,
+      "comprehension": 4.25,
+      "total": 20
     }
   ],
   "tasks": [
@@ -53,6 +53,37 @@
             "design": 3.5,
             "comprehension": 4,
             "total": 18.5
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-10/002-wareki",
+      "judges": [
+        "claude-code",
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "codex",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4.5,
+            "robustness": 4.5,
+            "design": 4,
+            "comprehension": 5,
+            "total": 23
+          }
+        },
+        {
+          "agent": "claude-code",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4.5,
+            "total": 21.5
           }
         }
       ]

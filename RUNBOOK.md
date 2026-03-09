@@ -87,3 +87,12 @@ npx tsx scripts/leaderboard.ts
 ```
 
 ## 9. コミット＆プッシュ
+
+結果を常にコミットしてプッシュすること。確認は不要。
+
+```bash
+cd ~/repos/jp-bench
+git add -A
+git commit -m "Add <task> results"
+git push
+```

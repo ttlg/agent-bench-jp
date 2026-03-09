@@ -1,0 +1,22 @@
+{
+  "name": "wareki-cli",
+  "version": "1.0.0",
+  "description": "西暦と和暦を相互変換するCLIツール",
+  "main": "dist/wareki.js",
+  "bin": {
+    "wareki": "dist/wareki.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "wareki": "node dist/wareki.js",
+    "test": "npm run build && node dist/test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "typescript": "^5.9.3"
+  }
+}
