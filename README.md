@@ -1,28 +1,40 @@
-# JP-Bench
+# Agent Bench JP
 
 日本語コーディングエージェントベンチマーク。
 
 日本語の指示に対するコーディングエージェント（Claude Code, Codex, etc.）の性能を比較評価する。
 
-## 特徴
+## Leaderboard
 
-- 日本語の依頼文による完全オリジナルのタスクセット
-- エージェント製品（モデル単体ではなく）の実力を測定
-- LLM-as-a-judge による匿名評価（/tmp パスで匿名性を自然に担保）
-- AGI Cockpit によるオーケストレーション
+| Rank | Agent | Model | Score (/25) | Correctness | Quality | Robustness | Design | Comprehension |
+|---:|---|---|---:|---:|---:|---:|---:|---:|
+| 1 | Codex | GPT-5.4 | **22** | 5 | 4 | 4 | 4 | 5 |
+| 2 | Claude Code | Opus 4.6 | **17** | 3 | 4 | 3 | 3 | 4 |
 
-## 評価方法
+*1 task evaluated (2026-03-10). Judge: Codex (GPT-5.4), independent blind evaluation.*
 
-1. 同一タスクを複数のエージェントに /tmp で実行させる
-2. ジャッジエージェントに /tmp の成果物パスを渡して採点（エージェント名は不明）
-3. マスターエージェントが結果を集計し、runs/ に整理
+## How it works
 
-## 評価観点（各5点満点、合計25点）
+1. 同一タスクを複数のエージェントに `/tmp` の別ディレクトリで実行させる
+2. 各成果物を個別のジャッジエージェントに渡して採点（エージェント名は不明）
+3. マスターエージェントが結果を集計し `runs/` に整理
 
-1. 正確性（Correctness）
-2. コード品質（Code Quality）
-3. 堅牢性（Robustness）
-4. 設計判断（Design Decision）
-5. 指示理解（Instruction Comprehension）
+## Evaluation criteria (25 points)
 
-詳細は [rubric.md](./rubric.md) を参照。
+| Criteria | Description |
+|---|---|
+| Correctness | 要求を正しく満たしているか |
+| Code Quality | 可読性、構造、命名 |
+| Robustness | エラーハンドリング、エッジケース |
+| Design | 抽象化、ライブラリ選択 |
+| Comprehension | 日本語の指示理解度 |
+
+各5点満点。詳細は [rubric.md](./rubric.md) を参照。
+
+## Key design decisions
+
+- **エージェント製品を測る** — モデル単体ではなく、Claude Code / Codex 等の製品としての実力
+- **匿名評価** — `/tmp` のランダムパスで匿名性を自然に担保。ジャッジは相手の存在すら知らない
+- **独立ジャッジ** — 各成果物を別々のジャッジエージェントが個別に採点。比較ではなく絶対評価
+- **完全日本語** — タスク指示は全て日本語。日本語理解力も評価対象
+- **AGI Cockpit** — オーケストレーション基盤として使用
