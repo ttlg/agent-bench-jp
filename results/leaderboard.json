@@ -1,32 +1,28 @@
 {
-  "updated": "2026-03-10",
+  "updated": "2026-03-09",
   "tasks_evaluated": 1,
-  "agents": [
+  "leaderboard": [
     {
       "rank": 1,
-      "agent": "Codex",
-      "model": "GPT-5.4",
-      "scores": {
-        "correctness": 5,
-        "code_quality": 4,
-        "robustness": 4,
-        "design": 4,
-        "comprehension": 5,
-        "total": 22
-      }
+      "agent": "codex",
+      "tasks": 1,
+      "correctness": 5,
+      "code_quality": 4,
+      "robustness": 4,
+      "design": 4,
+      "comprehension": 5,
+      "total": 22
     },
     {
       "rank": 2,
-      "agent": "Claude Code",
-      "model": "Opus 4.6",
-      "scores": {
-        "correctness": 3,
-        "code_quality": 4,
-        "robustness": 3,
-        "design": 3,
-        "comprehension": 4,
-        "total": 17
-      }
+      "agent": "claude-code",
+      "tasks": 1,
+      "correctness": 3,
+      "code_quality": 4,
+      "robustness": 3,
+      "design": 3,
+      "comprehension": 4,
+      "total": 17
     }
   ]
 }

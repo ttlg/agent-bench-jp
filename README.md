@@ -4,15 +4,6 @@
 
 日本語の指示に対するコーディングエージェント（Claude Code, Codex, etc.）の性能を比較評価する。
 
-## Leaderboard
-
-| Rank | Agent | Model | Score (/25) | Correctness | Quality | Robustness | Design | Comprehension |
-|---:|---|---|---:|---:|---:|---:|---:|---:|
-| 1 | Codex | GPT-5.4 | **22** | 5 | 4 | 4 | 4 | 5 |
-| 2 | Claude Code | Opus 4.6 | **17** | 3 | 4 | 3 | 3 | 4 |
-
-*1 task evaluated (2026-03-10). Judge: Codex (GPT-5.4), independent blind evaluation.*
-
 ## How it works
 
 1. 同一タスクを複数のエージェントに `/tmp` の別ディレクトリで実行させる
