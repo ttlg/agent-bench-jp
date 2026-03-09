@@ -1,6 +1,10 @@
 {
   "updated": "2026-03-09",
   "tasks_evaluated": 1,
+  "judges": [
+    "claude-code",
+    "codex"
+  ],
   "leaderboard": [
     {
       "rank": 1,
