@@ -92,8 +92,15 @@ footer{text-align:center;padding:32px 0;color:var(--text-muted);font-size:.8rem;
 
 <script>
 const COLORS = ['#58a6ff','#3fb950','#d2a8ff','#f0c040','#f47067','#79c0ff','#a5d6ff'];
+const AGENT_COLORS = {'codex':'#58a6ff','claude-code':'#3fb950'};
+const AGENT_ORDER = ['codex','claude-code'];
 const DIMENSIONS = ['correctness','code_quality','robustness','design','comprehension'];
 const DIM_JA = {correctness:'正確性',code_quality:'コード品質',robustness:'堅牢性',design:'設計',comprehension:'理解力'};
+function agentColor(name){return AGENT_COLORS[name]||COLORS[Object.keys(AGENT_COLORS).length%COLORS.length]}
+function sortAgents(agents){return [...agents].sort((a,b)=>{
+  const ai=AGENT_ORDER.indexOf(a.agent??a),bi=AGENT_ORDER.indexOf(b.agent??b);
+  return (ai===-1?99:ai)-(bi===-1?99:bi);
+})}
 
 function formatDuration(s){
   if(s<60)return `${s}秒`;
@@ -120,11 +127,11 @@ function render(data){
     <tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
   DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
   html+=`<th>合計</th></tr>`;
-  data.overall.forEach(r=>{
+  sortAgents(data.overall).forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
     const detail=r.model?` <span style="color:var(--text-muted);font-weight:400;font-size:.8rem">(${r.model} ${r.effort||''})</span>`:'';
     html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}${detail}</td><td>${r.tasks}</td>`;
-    DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,COLORS[i])}</td>`});
+    DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,agentColor(r.agent))}</td>`});
     html+=`<td class="total-cell">${r.total}</td></tr>`;
   });
   html+=`</table></div></section>`;
@@ -141,14 +148,15 @@ function render(data){
       <div class="task-content">
         <div class="chart-wrap"><canvas id="radar-${ti}"></canvas></div>
         <div>`;
-    t.agents.forEach((a,ai)=>{
+    sortAgents(t.agents).forEach(a=>{
+      const ac=agentColor(a.agent);
       html+=`<div class="agent-detail">
-        <div class="agent-detail-header"><span class="agent-detail-name" style="color:${COLORS[ai%COLORS.length]}">${a.agent}</span>
+        <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${a.agent}</span>
         <span class="agent-detail-total">${a.scores.total}点</span></div>`;
-      DIMENSIONS.forEach((d,di)=>{
+      DIMENSIONS.forEach(d=>{
         const pct=(a.scores[d]/5*100).toFixed(1);
         html+=`<div class="score-row"><span class="score-label">${DIM_JA[d]}</span>
-          <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${COLORS[ai%COLORS.length]}"></div></div>
+          <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${ac}"></div></div>
           <span class="score-num">${a.scores[d]}</span></div>`;
       });
       if(a.meta){
@@ -170,13 +178,12 @@ function render(data){
   if(ctxO){
     new Chart(ctxO,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:data.overall.map((r,i)=>({
+      datasets:sortAgents(data.overall).map(r=>{const c=agentColor(r.agent);return{
         label:r.agent,
         data:DIMENSIONS.map(d=>r[d]),
-        borderColor:COLORS[i%COLORS.length],
-        backgroundColor:COLORS[i%COLORS.length]+'22',
-        borderWidth:2,pointRadius:3,pointBackgroundColor:COLORS[i%COLORS.length]
-      }))
+        borderColor:c,backgroundColor:c+'22',
+        borderWidth:2,pointRadius:3,pointBackgroundColor:c
+      }})
     },options:radarOpts()});
   }
 
@@ -186,13 +193,12 @@ function render(data){
     if(!ctx)return;
     new Chart(ctx,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:t.agents.map((a,i)=>({
+      datasets:sortAgents(t.agents).map(a=>{const c=agentColor(a.agent);return{
         label:a.agent,
         data:DIMENSIONS.map(d=>a.scores[d]),
-        borderColor:COLORS[i%COLORS.length],
-        backgroundColor:COLORS[i%COLORS.length]+'22',
-        borderWidth:2,pointRadius:3,pointBackgroundColor:COLORS[i%COLORS.length]
-      }))
+        borderColor:c,backgroundColor:c+'22',
+        borderWidth:2,pointRadius:3,pointBackgroundColor:c
+      }})
     },options:radarOpts()});
   });
 }

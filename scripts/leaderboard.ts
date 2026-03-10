@@ -144,7 +144,15 @@ async function main() {
       }
     }
 
-    agents.sort((a, b) => b.scores.total - a.scores.total);
+    // Fixed order: codex first, then claude-code (consistent across all tasks)
+    const AGENT_ORDER = ['codex', 'claude-code'];
+    agents.sort((a, b) => {
+      const ai = AGENT_ORDER.indexOf(a.agent);
+      const bi = AGENT_ORDER.indexOf(b.agent);
+      const oa = ai === -1 ? AGENT_ORDER.length : ai;
+      const ob = bi === -1 ? AGENT_ORDER.length : bi;
+      return oa - ob;
+    });
     taskResults.push({
       taskId,
       judges: [...judges].sort(),
