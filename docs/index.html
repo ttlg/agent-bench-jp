@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Bench JP</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;
+  --text-muted:#8b949e;--accent:#58a6ff;--accent2:#3fb950;
+  --gold:#f0c040;--silver:#a0b0c0;--bronze:#cd7f32;
+  --bar-bg:#21262d;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+header{background:linear-gradient(135deg,#161b22 0%,#1a2332 100%);
+  border-bottom:1px solid var(--border);padding:32px 0;text-align:center}
+header h1{font-size:2rem;font-weight:700;letter-spacing:.02em}
+header h1 span{color:var(--accent)}
+.updated{color:var(--text-muted);font-size:.875rem;margin-top:6px}
+
+section{margin:40px 0}
+section h2{font-size:1.35rem;font-weight:600;margin-bottom:16px;padding-bottom:8px;
+  border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px}
+section h2::before{content:'';display:inline-block;width:4px;height:20px;
+  background:var(--accent);border-radius:2px}
+
+/* Leaderboard table */
+.lb-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.lb-table th{text-align:left;padding:10px 12px;color:var(--text-muted);font-weight:500;
+  font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;
+  border-bottom:1px solid var(--border);white-space:nowrap}
+.lb-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+.lb-table tr:hover td{background:rgba(88,166,255,.06)}
+.rank{font-weight:700;font-size:1.1rem;width:40px;text-align:center}
+.rank-1{color:var(--gold)}
+.rank-2{color:var(--silver)}
+.rank-3{color:var(--bronze)}
+.agent-name{font-weight:600;font-size:1rem}
+.total-cell{font-weight:700;font-size:1.1rem;color:var(--accent)}
+.score-bar-wrap{display:flex;align-items:center;gap:8px;min-width:90px}
+.score-bar{height:6px;border-radius:3px;background:var(--accent);transition:width .4s ease}
+.score-bar-bg{flex:1;height:6px;border-radius:3px;background:var(--bar-bg)}
+.score-val{font-size:.85rem;min-width:28px;text-align:right;color:var(--text-muted)}
+
+/* Task cards */
+.task-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin-bottom:24px}
+.task-card h3{font-size:1.1rem;margin-bottom:4px}
+.task-meta-line{font-size:.8rem;color:var(--text-muted);margin-bottom:16px}
+.task-content{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media(max-width:700px){.task-content{grid-template-columns:1fr}}
+.chart-wrap{position:relative;max-width:320px;margin:0 auto}
+
+.agent-detail{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.agent-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.agent-detail-name{font-weight:600;font-size:.95rem}
+.agent-detail-total{font-weight:700;color:var(--accent);font-size:1.05rem}
+.meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.meta-tag{font-size:.75rem;background:var(--bar-bg);color:var(--text-muted);
+  padding:2px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+.score-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:.82rem}
+.score-label{width:90px;color:var(--text-muted);text-align:right;flex-shrink:0}
+.score-fill{height:8px;border-radius:4px;transition:width .4s ease}
+.score-track{flex:1;height:8px;border-radius:4px;background:var(--bar-bg)}
+.score-num{min-width:20px;text-align:right;font-weight:500}
+
+.loading{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:1.1rem}
+.error{text-align:center;padding:40px 20px;color:#f85149;font-size:1rem}
+
+footer{text-align:center;padding:32px 0;color:var(--text-muted);font-size:.8rem;
+  border-top:1px solid var(--border);margin-top:40px}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Agent <span>Bench</span> JP</h1>
+    <div class="updated" id="updated"></div>
+  </div>
+</header>
+<main class="container">
+  <div id="app"><div class="loading">データを読み込み中...</div></div>
+</main>
+<footer><div class="container">Agent Bench JP — コーディングエージェント ベンチマーク</div></footer>
+
+<script>
+const COLORS = ['#58a6ff','#3fb950','#d2a8ff','#f0c040','#f47067','#79c0ff','#a5d6ff'];
+const DIMENSIONS = ['correctness','code_quality','robustness','design','comprehension'];
+const DIM_JA = {correctness:'正確性',code_quality:'コード品質',robustness:'堅牢性',design:'設計',comprehension:'理解力'};
+
+function formatDuration(s){
+  if(s<60)return `${s}秒`;
+  const m=Math.floor(s/60),r=s%60;
+  return r?`${m}分${r}秒`:`${m}分`;
+}
+
+function extractTaskName(id){return id.split('/').pop()||id}
+
+function renderScoreBar(val,max=5,color='var(--accent)'){
+  const pct=(val/max*100).toFixed(1);
+  return `<div class="score-bar-wrap">
+    <div class="score-bar-bg"><div class="score-bar" style="width:${pct}%;background:${color}"></div></div>
+    <span class="score-val">${val}</span></div>`;
+}
+
+function render(data){
+  document.getElementById('updated').textContent=`最終更新: ${data.updated} ｜ 評価タスク数: ${data.tasks_evaluated || data.tasks?.length||'—'}`;
+
+  let html='';
+
+  // Overall leaderboard
+  html+=`<section><h2>総合リーダーボード</h2><div style="overflow-x:auto"><table class="lb-table">
+    <tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
+  DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
+  html+=`<th>合計</th></tr>`;
+  data.overall.forEach(r=>{
+    const rc=r.rank<=3?` rank-${r.rank}`:'';
+    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}</td><td>${r.tasks}</td>`;
+    DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,COLORS[i])}</td>`});
+    html+=`<td class="total-cell">${r.total}</td></tr>`;
+  });
+  html+=`</table></div></section>`;
+
+  // Radar chart section
+  html+=`<section><h2>総合スコア比較</h2><div style="max-width:480px;margin:0 auto"><canvas id="radarOverall"></canvas></div></section>`;
+
+  // Task details
+  html+=`<section><h2>タスク別詳細</h2>`;
+  data.tasks.forEach((t,ti)=>{
+    const name=extractTaskName(t.taskId);
+    html+=`<div class="task-card"><h3>${name}</h3>
+      <div class="task-meta-line">ID: ${t.taskId}　｜　ジャッジ: ${t.judges.join(', ')}</div>
+      <div class="task-content">
+        <div class="chart-wrap"><canvas id="radar-${ti}"></canvas></div>
+        <div>`;
+    t.agents.forEach((a,ai)=>{
+      html+=`<div class="agent-detail">
+        <div class="agent-detail-header"><span class="agent-detail-name" style="color:${COLORS[ai%COLORS.length]}">${a.agent}</span>
+        <span class="agent-detail-total">${a.scores.total}点</span></div>`;
+      DIMENSIONS.forEach((d,di)=>{
+        const pct=(a.scores[d]/5*100).toFixed(1);
+        html+=`<div class="score-row"><span class="score-label">${DIM_JA[d]}</span>
+          <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${COLORS[ai%COLORS.length]}"></div></div>
+          <span class="score-num">${a.scores[d]}</span></div>`;
+      });
+      if(a.meta){
+        html+=`<div class="meta-tags">
+          <span class="meta-tag">⚡ effort: ${a.meta.effort}</span>
+          <span class="meta-tag">⏱ ${formatDuration(a.meta.duration_seconds)}</span></div>`;
+      }
+      html+=`</div>`;
+    });
+    html+=`</div></div></div>`;
+  });
+  html+=`</section>`;
+
+  document.getElementById('app').innerHTML=html;
+
+  // Draw overall radar
+  const ctxO=document.getElementById('radarOverall');
+  if(ctxO){
+    new Chart(ctxO,{type:'radar',data:{
+      labels:DIMENSIONS.map(d=>DIM_JA[d]),
+      datasets:data.overall.map((r,i)=>({
+        label:r.agent,
+        data:DIMENSIONS.map(d=>r[d]),
+        borderColor:COLORS[i%COLORS.length],
+        backgroundColor:COLORS[i%COLORS.length]+'22',
+        borderWidth:2,pointRadius:3,pointBackgroundColor:COLORS[i%COLORS.length]
+      }))
+    },options:radarOpts()});
+  }
+
+  // Draw per-task radars
+  data.tasks.forEach((t,ti)=>{
+    const ctx=document.getElementById(`radar-${ti}`);
+    if(!ctx)return;
+    new Chart(ctx,{type:'radar',data:{
+      labels:DIMENSIONS.map(d=>DIM_JA[d]),
+      datasets:t.agents.map((a,i)=>({
+        label:a.agent,
+        data:DIMENSIONS.map(d=>a.scores[d]),
+        borderColor:COLORS[i%COLORS.length],
+        backgroundColor:COLORS[i%COLORS.length]+'22',
+        borderWidth:2,pointRadius:3,pointBackgroundColor:COLORS[i%COLORS.length]
+      }))
+    },options:radarOpts()});
+  });
+}
+
+function radarOpts(){
+  return {
+    responsive:true,
+    scales:{r:{
+      min:0,max:5,
+      ticks:{stepSize:1,color:'#8b949e',backdropColor:'transparent',font:{size:10}},
+      grid:{color:'#30363d'},
+      angleLines:{color:'#30363d'},
+      pointLabels:{color:'#e6edf3',font:{size:12}}
+    }},
+    plugins:{legend:{labels:{color:'#e6edf3',font:{size:12},usePointStyle:true,pointStyle:'circle'}}}
+  };
+}
+
+fetch('../results/leaderboard.json')
+  .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  .then(render)
+  .catch(e=>{document.getElementById('app').innerHTML=`<div class="error">データの読み込みに失敗しました: ${e.message}</div>`});
+</script>
+</body>
+</html>
