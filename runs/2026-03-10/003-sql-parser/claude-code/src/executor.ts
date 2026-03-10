@@ -1,338 +1,371 @@
 import {
   SelectStatement,
   Expression,
-  Column,
+  SelectColumn,
   ColumnRef,
-  AggregateColumn,
+  JoinClause,
   OrderByItem,
+  AggregateColumn,
 } from './parser';
 
-type Row = Record<string, unknown>;
-type DataSource = Record<string, Row[]>;
+type Row = Record<string, any>;
+type Database = Record<string, Row[]>;
 
-function resolveColumnValue(row: Row, name: string, table?: string, aliases?: Record<string, string>): unknown {
-  if (table) {
-    // Try alias resolution
-    const realTable = aliases?.[table] || table;
-    const prefixed = `${realTable}.${name}`;
-    if (prefixed in row) return row[prefixed];
-    // Also try alias as prefix
-    const aliasedKey = `${table}.${name}`;
-    if (aliasedKey in row) return row[aliasedKey];
+export function execute(stmt: SelectStatement, db: Database): Row[] {
+  const tableName = stmt.from.table;
+  if (!db[tableName]) {
+    throw new Error(`Table '${tableName}' not found`);
   }
-  // Try direct name
-  if (name in row) return row[name];
-  // Search for table-prefixed keys matching the name
-  for (const key of Object.keys(row)) {
-    const parts = key.split('.');
-    if (parts.length === 2 && parts[1] === name) {
-      return row[key];
+
+  const alias = stmt.from.alias || tableName;
+  let rows: Row[] = db[tableName].map((row) => {
+    const result: Row = {};
+    for (const [key, value] of Object.entries(row)) {
+      result[`${alias}.${key}`] = value;
+      result[key] = value;
     }
-  }
-  return undefined;
-}
+    return result;
+  });
 
-function evaluateExpression(expr: Expression, row: Row, aliases: Record<string, string>): unknown {
-  switch (expr.type) {
-    case 'literal':
-      return expr.value;
-
-    case 'column_ref': {
-      // Handle aggregate placeholders in HAVING
-      if (expr.name.startsWith('__agg__')) {
-        return row[expr.name];
-      }
-      return resolveColumnValue(row, expr.name, expr.table, aliases);
-    }
-
-    case 'binary': {
-      if (expr.op === 'AND') {
-        return evaluateExpression(expr.left, row, aliases) && evaluateExpression(expr.right, row, aliases);
-      }
-      if (expr.op === 'OR') {
-        return evaluateExpression(expr.left, row, aliases) || evaluateExpression(expr.right, row, aliases);
-      }
-      const left = evaluateExpression(expr.left, row, aliases);
-      const right = evaluateExpression(expr.right, row, aliases);
-      switch (expr.op) {
-        case '=': return left === right;
-        case '!=': return left !== right;
-        case '<': return (left as number) < (right as number);
-        case '>': return (left as number) > (right as number);
-        case '<=': return (left as number) <= (right as number);
-        case '>=': return (left as number) >= (right as number);
-        default: throw new Error(`Unknown operator: ${expr.op}`);
-      }
-    }
-
-    case 'unary': {
-      if (expr.op === 'NOT') {
-        return !evaluateExpression(expr.operand, row, aliases);
-      }
-      throw new Error(`Unknown unary operator: ${expr.op}`);
-    }
-
-    case 'like': {
-      const val = String(resolveColumnValue(row, expr.column.name, expr.column.table, aliases) ?? '');
-      const pattern = expr.pattern
-        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-        .replace(/%/g, '.*');
-      return new RegExp(`^${pattern}$`).test(val);
-    }
-
-    default:
-      throw new Error(`Unknown expression type: ${(expr as Expression).type}`);
-  }
-}
-
-function computeAggregate(func: string, arg: string, rows: Row[], aliases: Record<string, string>, argTable?: string): unknown {
-  if (func === 'COUNT') {
-    if (arg === '*') return rows.length;
-    return rows.filter(r => resolveColumnValue(r, arg, argTable, aliases) != null).length;
-  }
-
-  const values = rows
-    .map(r => resolveColumnValue(r, arg, argTable, aliases))
-    .filter(v => v != null)
-    .map(v => Number(v));
-
-  switch (func) {
-    case 'SUM': return values.reduce((a, b) => a + b, 0);
-    case 'AVG': return values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
-    case 'MIN': return values.length ? Math.min(...values) : null;
-    case 'MAX': return values.length ? Math.max(...values) : null;
-    default: throw new Error(`Unknown aggregate function: ${func}`);
-  }
-}
-
-function buildColumnLabel(col: Column): string {
-  switch (col.type) {
-    case 'star': return '*';
-    case 'column': return col.table ? `${col.table}.${col.name}` : col.name;
-    case 'aggregate': return `${col.func}(${col.arg})`;
-  }
-}
-
-export function execute(stmt: SelectStatement, data: DataSource): Row[] {
-  const fromTable = data[stmt.from.name];
-  if (!fromTable) {
-    throw new Error(`Table not found: ${stmt.from.name}`);
-  }
-
-  // Build alias map: alias -> real table name
-  const aliases: Record<string, string> = {};
-  if (stmt.from.alias) {
-    aliases[stmt.from.alias] = stmt.from.name;
-  }
   for (const join of stmt.joins) {
-    if (join.table.alias) {
-      aliases[join.table.alias] = join.table.name;
-    }
+    rows = executeJoin(rows, join, db);
   }
 
-  // Determine if we have joins
-  const hasJoins = stmt.joins.length > 0;
-
-  // Build initial rows, prefixing keys with table name if joins are present
-  let rows: Row[];
-  if (hasJoins) {
-    const fromName = stmt.from.alias || stmt.from.name;
-    rows = fromTable.map(r => {
-      const newRow: Row = {};
-      for (const [k, v] of Object.entries(r)) {
-        newRow[`${fromName}.${k}`] = v;
-      }
-      return newRow;
-    });
-  } else {
-    rows = fromTable.map(r => ({ ...r }));
-  }
-
-  // Process JOINs
-  for (const join of stmt.joins) {
-    const joinTableData = data[join.table.name];
-    if (!joinTableData) {
-      throw new Error(`Table not found: ${join.table.name}`);
-    }
-    const joinName = join.table.alias || join.table.name;
-    const newRows: Row[] = [];
-
-    for (const leftRow of rows) {
-      let matched = false;
-      for (const rightRow of joinTableData) {
-        const combinedRow: Row = { ...leftRow };
-        for (const [k, v] of Object.entries(rightRow)) {
-          combinedRow[`${joinName}.${k}`] = v;
-        }
-        if (evaluateExpression(join.on, combinedRow, aliases)) {
-          newRows.push(combinedRow);
-          matched = true;
-        }
-      }
-      if (!matched && join.type === 'LEFT') {
-        const combinedRow: Row = { ...leftRow };
-        if (joinTableData.length > 0) {
-          for (const k of Object.keys(joinTableData[0])) {
-            combinedRow[`${joinName}.${k}`] = null;
-          }
-        }
-        newRows.push(combinedRow);
-      }
-    }
-    rows = newRows;
-  }
-
-  // WHERE
   if (stmt.where) {
-    rows = rows.filter(r => evaluateExpression(stmt.where!, r, aliases));
+    rows = rows.filter((row) => evaluateExpression(stmt.where!, row));
   }
 
-  // Check for aggregates
-  const hasAggregates = stmt.columns.some(c => c.type === 'aggregate');
+  const isAggregate = stmt.groupBy.length > 0 || hasAggregates(stmt.columns);
 
-  // GROUP BY + aggregates
-  if (stmt.groupBy || hasAggregates) {
-    const groupKeys = stmt.groupBy || [];
-
-    // Group rows
-    const groups = new Map<string, Row[]>();
-    for (const row of rows) {
-      const key = groupKeys.map(g => {
-        const val = resolveColumnValue(row, g.name, g.table, aliases);
-        return String(val);
-      }).join('|||');
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key)!.push(row);
-    }
-
-    // Build result rows
-    const resultRows: Row[] = [];
-    for (const [, groupRows] of groups) {
-      const resultRow: Row = {};
-      const firstRow = groupRows[0];
-
-      // Add group key columns
-      for (const g of groupKeys) {
-        const label = g.table ? `${g.table}.${g.name}` : g.name;
-        resultRow[label] = resolveColumnValue(firstRow, g.name, g.table, aliases);
-      }
-
-      // Process columns
-      for (const col of stmt.columns) {
-        if (col.type === 'aggregate') {
-          const label = buildColumnLabel(col);
-          resultRow[label] = computeAggregate(col.func, col.arg, groupRows, aliases, col.argTable);
-          // Also store as __agg__ for HAVING
-          resultRow[`__agg__${col.func}__${col.arg}`] = resultRow[label];
-        } else if (col.type === 'column') {
-          const label = col.table ? `${col.table}.${col.name}` : col.name;
-          resultRow[label] = resolveColumnValue(firstRow, col.name, col.table, aliases);
-        }
-      }
-
-      resultRows.push(resultRow);
-    }
-
-    rows = resultRows;
-
-    // HAVING
-    if (stmt.having) {
-      rows = rows.filter(r => evaluateExpression(stmt.having!, r, aliases));
-    }
-
-    // Clean up __agg__ keys
-    rows = rows.map(r => {
-      const cleaned: Row = {};
-      for (const [k, v] of Object.entries(r)) {
-        if (!k.startsWith('__agg__')) {
-          cleaned[k] = v;
-        }
-      }
-      return cleaned;
-    });
-  } else {
-    // Project columns (no aggregation)
-    rows = projectColumns(rows, stmt.columns, aliases, hasJoins);
+  if (isAggregate) {
+    rows = executeGroupBy(rows, stmt);
   }
 
-  // ORDER BY
-  if (stmt.orderBy) {
-    rows = sortRows(rows, stmt.orderBy, aliases);
+  if (stmt.orderBy.length > 0) {
+    rows = executeOrderBy(rows, stmt.orderBy);
   }
 
-  // OFFSET
-  if (stmt.offset) {
+  if (stmt.offset !== null) {
     rows = rows.slice(stmt.offset);
   }
-
-  // LIMIT
-  if (stmt.limit !== undefined) {
+  if (stmt.limit !== null) {
     rows = rows.slice(0, stmt.limit);
+  }
+
+  if (!isAggregate) {
+    rows = projectColumns(rows, stmt.columns, stmt.joins.length > 0);
   }
 
   return rows;
 }
 
-function projectColumns(rows: Row[], columns: Column[], aliases: Record<string, string>, hasJoins: boolean): Row[] {
-  // Check if it's SELECT *
-  if (columns.length === 1 && columns[0].type === 'star' && !columns[0].table) {
-    if (!hasJoins) return rows;
-    // For joins with *, keep prefixed keys but make them friendlier
-    return rows;
+function executeJoin(leftRows: Row[], join: JoinClause, db: Database): Row[] {
+  const rightTable = join.table.table;
+  if (!db[rightTable]) {
+    throw new Error(`Table '${rightTable}' not found`);
   }
 
-  return rows.map(row => {
+  const rightAlias = join.table.alias || rightTable;
+  const rightData = db[rightTable];
+  const result: Row[] = [];
+
+  for (const leftRow of leftRows) {
+    let matched = false;
+    for (const rightOriginal of rightData) {
+      const combined: Row = { ...leftRow };
+      for (const [key, value] of Object.entries(rightOriginal)) {
+        combined[`${rightAlias}.${key}`] = value;
+      }
+      if (evaluateExpression(join.condition, combined)) {
+        result.push(combined);
+        matched = true;
+      }
+    }
+    if (!matched && join.type === 'LEFT') {
+      const combined: Row = { ...leftRow };
+      if (rightData.length > 0) {
+        for (const key of Object.keys(rightData[0])) {
+          combined[`${rightAlias}.${key}`] = null;
+        }
+      }
+      result.push(combined);
+    }
+  }
+
+  return result;
+}
+
+function resolveColumnValue(
+  row: Row,
+  table: string | undefined,
+  column: string
+): any {
+  if (table) {
+    const key = `${table}.${column}`;
+    if (key in row) return row[key];
+  }
+  if (column in row) return row[column];
+  for (const [key, value] of Object.entries(row)) {
+    if (key.endsWith(`.${column}`)) return value;
+  }
+  return undefined;
+}
+
+function evaluateExpression(expr: Expression, row: Row): any {
+  switch (expr.type) {
+    case 'literal':
+      return expr.value;
+    case 'column_ref':
+      return resolveColumnValue(row, expr.table, expr.column);
+    case 'binary': {
+      const left = evaluateExpression(expr.left, row);
+      const right = evaluateExpression(expr.right, row);
+      switch (expr.operator) {
+        case '=':
+          return left === right;
+        case '!=':
+          return left !== right;
+        case '<':
+          return left < right;
+        case '>':
+          return left > right;
+        case '<=':
+          return left <= right;
+        case '>=':
+          return left >= right;
+        case 'AND':
+          return left && right;
+        case 'OR':
+          return left || right;
+        case 'LIKE':
+          return matchLike(String(left), String(right));
+      }
+      break;
+    }
+    case 'unary':
+      if (expr.operator === 'NOT') {
+        return !evaluateExpression(expr.operand, row);
+      }
+      break;
+    case 'aggregate':
+      throw new Error(
+        'Aggregate functions cannot be used outside GROUP BY context'
+      );
+  }
+}
+
+function matchLike(value: string, pattern: string): boolean {
+  let regexStr = '';
+  for (let i = 0; i < pattern.length; i++) {
+    const ch = pattern[i];
+    if (ch === '%') {
+      regexStr += '.*';
+    } else if (/[.*+?^${}()|[\]\\]/.test(ch)) {
+      regexStr += '\\' + ch;
+    } else {
+      regexStr += ch;
+    }
+  }
+  return new RegExp(`^${regexStr}$`, 'u').test(value);
+}
+
+function hasAggregates(columns: SelectColumn[]): boolean {
+  return columns.some((col) => col.type === 'aggregate');
+}
+
+function executeGroupBy(rows: Row[], stmt: SelectStatement): Row[] {
+  const groups = new Map<string, Row[]>();
+
+  if (stmt.groupBy.length === 0) {
+    groups.set('__all__', rows);
+  } else {
+    for (const row of rows) {
+      const key = stmt.groupBy
+        .map((col) => String(resolveColumnValue(row, col.table, col.column)))
+        .join('\0');
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
+      groups.get(key)!.push(row);
+    }
+  }
+
+  const result: Row[] = [];
+
+  for (const [, groupRows] of groups) {
+    const resultRow: Row = {};
+
+    for (const col of stmt.columns) {
+      if (col.type === 'column_ref') {
+        const value = resolveColumnValue(
+          groupRows[0],
+          col.table,
+          col.column
+        );
+        const key = col.table ? `${col.table}.${col.column}` : col.column;
+        resultRow[key] = value;
+      } else if (col.type === 'aggregate') {
+        const key = formatAggregateKey(col);
+        resultRow[key] = computeAggregate(col.func, col.argument, groupRows);
+      }
+    }
+
+    if (stmt.having) {
+      if (!evaluateHaving(stmt.having, groupRows)) continue;
+    }
+
+    result.push(resultRow);
+  }
+
+  return result;
+}
+
+function formatAggregateKey(col: AggregateColumn): string {
+  if (col.argument.type === 'star') {
+    return `${col.func}(*)`;
+  }
+  const arg = col.argument as ColumnRef;
+  const argStr = arg.table ? `${arg.table}.${arg.column}` : arg.column;
+  return `${col.func}(${argStr})`;
+}
+
+function computeAggregate(
+  func: string,
+  argument: any,
+  rows: Row[]
+): number {
+  if (func === 'COUNT') {
+    if (argument.type === 'star') return rows.length;
+    return rows.filter((r) => {
+      const v = resolveColumnValue(r, argument.table, argument.column);
+      return v !== null && v !== undefined;
+    }).length;
+  }
+
+  const values = rows
+    .map((r) => resolveColumnValue(r, argument.table, argument.column))
+    .filter((v) => v !== null && v !== undefined) as number[];
+
+  switch (func) {
+    case 'SUM':
+      return values.reduce((a, b) => a + b, 0);
+    case 'AVG':
+      return values.length > 0
+        ? values.reduce((a, b) => a + b, 0) / values.length
+        : 0;
+    case 'MIN':
+      return Math.min(...values);
+    case 'MAX':
+      return Math.max(...values);
+    default:
+      throw new Error(`Unknown aggregate function: ${func}`);
+  }
+}
+
+function evaluateHaving(expr: Expression, groupRows: Row[]): boolean {
+  return !!evaluateHavingValue(expr, groupRows);
+}
+
+function evaluateHavingValue(expr: Expression, groupRows: Row[]): any {
+  switch (expr.type) {
+    case 'aggregate': {
+      const argument =
+        expr.argument.type === 'star'
+          ? { type: 'star' }
+          : expr.argument;
+      return computeAggregate(expr.func, argument, groupRows);
+    }
+    case 'literal':
+      return expr.value;
+    case 'column_ref':
+      return resolveColumnValue(groupRows[0], expr.table, expr.column);
+    case 'binary': {
+      const left = evaluateHavingValue(expr.left, groupRows);
+      const right = evaluateHavingValue(expr.right, groupRows);
+      switch (expr.operator) {
+        case '=':
+          return left === right;
+        case '!=':
+          return left !== right;
+        case '<':
+          return left < right;
+        case '>':
+          return left > right;
+        case '<=':
+          return left <= right;
+        case '>=':
+          return left >= right;
+        case 'AND':
+          return left && right;
+        case 'OR':
+          return left || right;
+        default:
+          return false;
+      }
+    }
+    case 'unary':
+      if (expr.operator === 'NOT') {
+        return !evaluateHavingValue(expr.operand, groupRows);
+      }
+      return false;
+  }
+}
+
+function projectColumns(
+  rows: Row[],
+  columns: SelectColumn[],
+  hasJoins: boolean
+): Row[] {
+  if (columns.length === 1 && columns[0].type === 'star') {
+    return rows.map((row) => {
+      const result: Row = {};
+      if (hasJoins) {
+        for (const [key, value] of Object.entries(row)) {
+          if (key.includes('.')) {
+            result[key] = value;
+          }
+        }
+      } else {
+        for (const [key, value] of Object.entries(row)) {
+          if (!key.includes('.')) {
+            result[key] = value;
+          }
+        }
+      }
+      return result;
+    });
+  }
+
+  return rows.map((row) => {
     const result: Row = {};
     for (const col of columns) {
       if (col.type === 'star') {
-        if (col.table) {
-          const realTable = aliases[col.table] || col.table;
-          for (const [k, v] of Object.entries(row)) {
-            const prefix = `${col.table}.`;
-            const realPrefix = `${realTable}.`;
-            if (k.startsWith(prefix) || k.startsWith(realPrefix)) {
-              result[k] = v;
-            }
+        for (const [key, value] of Object.entries(row)) {
+          if (!key.includes('.')) {
+            result[key] = value;
           }
-        } else {
-          Object.assign(result, row);
         }
-      } else if (col.type === 'column') {
-        const label = col.table ? `${col.table}.${col.name}` : col.name;
-        result[label] = resolveColumnValue(row, col.name, col.table, aliases);
+      } else if (col.type === 'column_ref') {
+        const value = resolveColumnValue(row, col.table, col.column);
+        const key = col.table ? `${col.table}.${col.column}` : col.column;
+        result[key] = value;
       }
     }
     return result;
   });
 }
 
-function sortRows(rows: Row[], orderBy: OrderByItem[], aliases: Record<string, string>): Row[] {
+function executeOrderBy(rows: Row[], orderBy: OrderByItem[]): Row[] {
   return [...rows].sort((a, b) => {
     for (const item of orderBy) {
-      let aVal: unknown, bVal: unknown;
-      if (item.column.type === 'aggregate') {
-        const label = buildColumnLabel(item.column);
-        aVal = a[label];
-        bVal = b[label];
-      } else {
-        const col = item.column as ColumnRef;
-        aVal = resolveColumnValue(a, col.name, col.table, aliases);
-        bVal = resolveColumnValue(b, col.name, col.table, aliases);
+      const aVal = resolveColumnValue(a, item.column.table, item.column.column);
+      const bVal = resolveColumnValue(b, item.column.table, item.column.column);
+      let cmp = 0;
+      if (aVal < bVal) cmp = -1;
+      else if (aVal > bVal) cmp = 1;
+      if (cmp !== 0) {
+        return item.direction === 'DESC' ? -cmp : cmp;
       }
-
-      if (aVal === bVal) continue;
-      if (aVal == null) return 1;
-      if (bVal == null) return -1;
-
-      let cmp: number;
-      if (typeof aVal === 'number' && typeof bVal === 'number') {
-        cmp = aVal - bVal;
-      } else {
-        cmp = String(aVal).localeCompare(String(bVal));
-      }
-
-      if (item.direction === 'DESC') cmp = -cmp;
-      if (cmp !== 0) return cmp;
     }
     return 0;
   });

@@ -1,99 +1,92 @@
 import { Token, TokenType } from './lexer';
 
-// AST Node types
-export interface SelectColumn {
-  type: 'column';
+export interface ColumnRef {
+  type: 'column_ref';
   table?: string;
-  name: string;
+  column: string;
 }
 
 export interface StarColumn {
   type: 'star';
-  table?: string;
 }
 
 export interface AggregateColumn {
   type: 'aggregate';
-  func: string; // COUNT, SUM, AVG, MIN, MAX
-  arg: string;  // column name or '*'
-  argTable?: string;
+  func: 'COUNT' | 'SUM' | 'AVG' | 'MIN' | 'MAX';
+  argument: ColumnRef | StarColumn;
 }
 
-export type Column = SelectColumn | StarColumn | AggregateColumn;
+export type SelectColumn = ColumnRef | StarColumn | AggregateColumn;
 
 export interface TableRef {
-  name: string;
+  table: string;
   alias?: string;
 }
 
 export interface JoinClause {
   type: 'INNER' | 'LEFT';
   table: TableRef;
-  on: Expression;
+  condition: Expression;
 }
 
-export type Expression =
-  | BinaryExpr
-  | UnaryExpr
-  | ColumnRef
-  | LiteralExpr
-  | LikeExpr;
+export interface OrderByItem {
+  column: ColumnRef;
+  direction: 'ASC' | 'DESC';
+}
 
-export interface BinaryExpr {
+export interface BinaryExpression {
   type: 'binary';
-  op: string;
+  operator: '=' | '!=' | '<' | '>' | '<=' | '>=' | 'AND' | 'OR' | 'LIKE';
   left: Expression;
   right: Expression;
 }
 
-export interface UnaryExpr {
+export interface UnaryExpression {
   type: 'unary';
-  op: string;
+  operator: 'NOT';
   operand: Expression;
 }
 
-export interface ColumnRef {
+export interface LiteralExpression {
+  type: 'literal';
+  value: number | string;
+}
+
+export interface ColumnRefExpression {
   type: 'column_ref';
   table?: string;
-  name: string;
+  column: string;
 }
 
-export interface LiteralExpr {
-  type: 'literal';
-  value: string | number;
+export interface AggregateExpression {
+  type: 'aggregate';
+  func: 'COUNT' | 'SUM' | 'AVG' | 'MIN' | 'MAX';
+  argument: ColumnRefExpression | { type: 'star' };
 }
 
-export interface LikeExpr {
-  type: 'like';
-  column: ColumnRef;
-  pattern: string;
-}
-
-export interface OrderByItem {
-  column: ColumnRef | AggregateColumn;
-  direction: 'ASC' | 'DESC';
-}
-
-export interface GroupByItem {
-  table?: string;
-  name: string;
-}
+export type Expression =
+  | BinaryExpression
+  | UnaryExpression
+  | LiteralExpression
+  | ColumnRefExpression
+  | AggregateExpression;
 
 export interface SelectStatement {
-  columns: Column[];
+  type: 'select';
+  columns: SelectColumn[];
   from: TableRef;
   joins: JoinClause[];
-  where?: Expression;
-  groupBy?: GroupByItem[];
-  having?: Expression;
-  orderBy?: OrderByItem[];
-  limit?: number;
-  offset?: number;
+  where: Expression | null;
+  groupBy: ColumnRef[];
+  having: Expression | null;
+  orderBy: OrderByItem[];
+  limit: number | null;
+  offset: number | null;
 }
 
 class Parser {
   private tokens: Token[];
-  private pos = 0;
+  private pos: number = 0;
 
   constructor(tokens: Token[]) {
     this.tokens = tokens;
@@ -101,10 +94,6 @@ class Parser {
 
   private current(): Token {
     return this.tokens[this.pos];
-  }
-
-  private peek(offset = 0): Token {
-    return this.tokens[this.pos + offset] || { type: TokenType.EOF, value: '' };
   }
 
   private advance(): Token {
@@ -116,7 +105,9 @@ class Parser {
   private expect(type: TokenType): Token {
     const token = this.current();
     if (token.type !== type) {
-      throw new Error(`Expected ${type} but got ${token.type} (${token.value}) at position ${this.pos}`);
+      throw new Error(
+        `Expected ${type} but got ${token.type} ('${token.value}') at position ${token.position}`
+      );
     }
     return this.advance();
   }
@@ -129,203 +120,192 @@ class Parser {
     return this.parseSelect();
   }
 
-  private isAggregateFunc(type: TokenType): boolean {
-    return [TokenType.COUNT, TokenType.SUM, TokenType.AVG, TokenType.MIN, TokenType.MAX].includes(type);
-  }
-
   private parseSelect(): SelectStatement {
     this.expect(TokenType.SELECT);
-
-    const columns = this.parseColumns();
-
+    const columns = this.parseSelectColumns();
     this.expect(TokenType.FROM);
     const from = this.parseTableRef();
+    const joins = this.parseJoins();
 
-    const joins: JoinClause[] = [];
-    while (this.match(TokenType.JOIN, TokenType.INNER, TokenType.LEFT)) {
-      joins.push(this.parseJoin());
-    }
-
-    let where: Expression | undefined;
+    let where: Expression | null = null;
     if (this.match(TokenType.WHERE)) {
       this.advance();
       where = this.parseExpression();
     }
 
-    let groupBy: GroupByItem[] | undefined;
+    let groupBy: ColumnRef[] = [];
     if (this.match(TokenType.GROUP)) {
       this.advance();
       this.expect(TokenType.BY);
-      groupBy = this.parseGroupBy();
+      groupBy = this.parseGroupByColumns();
     }
 
-    let having: Expression | undefined;
+    let having: Expression | null = null;
     if (this.match(TokenType.HAVING)) {
       this.advance();
       having = this.parseExpression();
     }
 
-    let orderBy: OrderByItem[] | undefined;
+    let orderBy: OrderByItem[] = [];
     if (this.match(TokenType.ORDER)) {
       this.advance();
       this.expect(TokenType.BY);
       orderBy = this.parseOrderBy();
     }
 
-    let limit: number | undefined;
+    let limit: number | null = null;
     if (this.match(TokenType.LIMIT)) {
       this.advance();
-      limit = Number(this.expect(TokenType.NUMBER).value);
+      limit = parseInt(this.expect(TokenType.NUMBER).value);
     }
 
-    let offset: number | undefined;
+    let offset: number | null = null;
     if (this.match(TokenType.OFFSET)) {
       this.advance();
-      offset = Number(this.expect(TokenType.NUMBER).value);
+      offset = parseInt(this.expect(TokenType.NUMBER).value);
     }
 
-    return { columns, from, joins, where, groupBy, having, orderBy, limit, offset };
+    return {
+      type: 'select',
+      columns,
+      from,
+      joins,
+      where,
+      groupBy,
+      having,
+      orderBy,
+      limit,
+      offset,
+    };
   }
 
-  private parseColumns(): Column[] {
-    const columns: Column[] = [];
-    columns.push(this.parseColumn());
+  private parseSelectColumns(): SelectColumn[] {
+    const columns: SelectColumn[] = [];
+    columns.push(this.parseSelectColumn());
     while (this.match(TokenType.COMMA)) {
       this.advance();
-      columns.push(this.parseColumn());
+      columns.push(this.parseSelectColumn());
     }
     return columns;
   }
 
-  private parseColumn(): Column {
-    // Aggregate function
-    if (this.isAggregateFunc(this.current().type)) {
+  private parseSelectColumn(): SelectColumn {
+    if (this.isAggregateFunction()) {
       return this.parseAggregateColumn();
     }
-
-    // Star
     if (this.match(TokenType.STAR)) {
       this.advance();
       return { type: 'star' };
     }
+    return this.parseColumnRef();
+  }
 
-    // table.* or table.column or column
-    const id = this.expect(TokenType.IDENTIFIER);
-    if (this.match(TokenType.DOT)) {
-      this.advance();
-      if (this.match(TokenType.STAR)) {
-        this.advance();
-        return { type: 'star', table: id.value };
-      }
-      const col = this.expect(TokenType.IDENTIFIER);
-      return { type: 'column', table: id.value, name: col.value };
-    }
-    return { type: 'column', name: id.value };
+  private isAggregateFunction(): boolean {
+    return this.match(
+      TokenType.COUNT,
+      TokenType.SUM,
+      TokenType.AVG,
+      TokenType.MIN,
+      TokenType.MAX
+    );
   }
 
   private parseAggregateColumn(): AggregateColumn {
-    const func = this.advance().value;
+    const func = this.advance().value as AggregateColumn['func'];
     this.expect(TokenType.LPAREN);
-    let arg: string;
-    let argTable: string | undefined;
+
+    let argument: ColumnRef | StarColumn;
     if (this.match(TokenType.STAR)) {
       this.advance();
-      arg = '*';
+      argument = { type: 'star' };
     } else {
-      const id = this.expect(TokenType.IDENTIFIER);
-      if (this.match(TokenType.DOT)) {
-        this.advance();
-        argTable = id.value;
-        arg = this.expect(TokenType.IDENTIFIER).value;
-      } else {
-        arg = id.value;
-      }
+      argument = this.parseColumnRef();
     }
+
     this.expect(TokenType.RPAREN);
-    return { type: 'aggregate', func, arg, argTable };
+    return { type: 'aggregate', func, argument };
+  }
+
+  private parseColumnRef(): ColumnRef {
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    if (this.match(TokenType.DOT)) {
+      this.advance();
+      const column = this.expect(TokenType.IDENTIFIER).value;
+      return { type: 'column_ref', table: name, column };
+    }
+    return { type: 'column_ref', column: name };
   }
 
   private parseTableRef(): TableRef {
-    const name = this.expect(TokenType.IDENTIFIER).value;
+    const table = this.expect(TokenType.IDENTIFIER).value;
     let alias: string | undefined;
     if (this.match(TokenType.IDENTIFIER)) {
       alias = this.advance().value;
-    } else if (this.match(TokenType.AS)) {
-      this.advance();
-      alias = this.expect(TokenType.IDENTIFIER).value;
     }
-    return { name, alias };
+    return { table, alias };
   }
 
-  private parseJoin(): JoinClause {
-    let joinType: 'INNER' | 'LEFT' = 'INNER';
-    if (this.match(TokenType.LEFT)) {
-      joinType = 'LEFT';
-      this.advance();
-      if (this.match(TokenType.OUTER)) this.advance();
-    } else if (this.match(TokenType.INNER)) {
-      this.advance();
-    }
-    this.expect(TokenType.JOIN);
-    const table = this.parseTableRef();
-    this.expect(TokenType.ON);
-    const on = this.parseExpression();
-    return { type: joinType, table, on };
-  }
-
-  private parseGroupBy(): GroupByItem[] {
-    const items: GroupByItem[] = [];
-    const parseOne = (): GroupByItem => {
-      const id = this.expect(TokenType.IDENTIFIER);
-      if (this.match(TokenType.DOT)) {
+  private parseJoins(): JoinClause[] {
+    const joins: JoinClause[] = [];
+    while (true) {
+      let joinType: 'INNER' | 'LEFT' | undefined;
+      if (this.match(TokenType.JOIN)) {
+        joinType = 'INNER';
         this.advance();
-        const col = this.expect(TokenType.IDENTIFIER);
-        return { table: id.value, name: col.value };
+      } else if (this.match(TokenType.INNER)) {
+        joinType = 'INNER';
+        this.advance();
+        this.expect(TokenType.JOIN);
+      } else if (this.match(TokenType.LEFT)) {
+        joinType = 'LEFT';
+        this.advance();
+        if (this.match(TokenType.OUTER)) {
+          this.advance();
+        }
+        this.expect(TokenType.JOIN);
+      } else {
+        break;
       }
-      return { name: id.value };
-    };
-    items.push(parseOne());
+      const table = this.parseTableRef();
+      this.expect(TokenType.ON);
+      const condition = this.parseExpression();
+      joins.push({ type: joinType, table, condition });
+    }
+    return joins;
+  }
+
+  private parseGroupByColumns(): ColumnRef[] {
+    const columns: ColumnRef[] = [];
+    columns.push(this.parseColumnRef());
     while (this.match(TokenType.COMMA)) {
       this.advance();
-      items.push(parseOne());
+      columns.push(this.parseColumnRef());
     }
-    return items;
+    return columns;
   }
 
   private parseOrderBy(): OrderByItem[] {
     const items: OrderByItem[] = [];
-    const parseOne = (): OrderByItem => {
-      let column: ColumnRef | AggregateColumn;
-      if (this.isAggregateFunc(this.current().type)) {
-        column = this.parseAggregateColumn();
-      } else {
-        const id = this.expect(TokenType.IDENTIFIER);
-        if (this.match(TokenType.DOT)) {
-          this.advance();
-          const col = this.expect(TokenType.IDENTIFIER);
-          column = { type: 'column_ref', table: id.value, name: col.value };
-        } else {
-          column = { type: 'column_ref', name: id.value };
-        }
-      }
-      let direction: 'ASC' | 'DESC' = 'ASC';
-      if (this.match(TokenType.ASC)) {
-        this.advance();
-      } else if (this.match(TokenType.DESC)) {
-        this.advance();
-        direction = 'DESC';
-      }
-      return { column, direction };
-    };
-    items.push(parseOne());
+    items.push(this.parseOrderByItem());
     while (this.match(TokenType.COMMA)) {
       this.advance();
-      items.push(parseOne());
+      items.push(this.parseOrderByItem());
     }
     return items;
   }
 
-  // Expression parsing with precedence: OR < AND < NOT < comparison
+  private parseOrderByItem(): OrderByItem {
+    const column = this.parseColumnRef();
+    let direction: 'ASC' | 'DESC' = 'ASC';
+    if (this.match(TokenType.ASC)) {
+      this.advance();
+    } else if (this.match(TokenType.DESC)) {
+      this.advance();
+      direction = 'DESC';
+    }
+    return { column, direction };
+  }
+
   private parseExpression(): Expression {
     return this.parseOr();
   }
@@ -335,7 +315,7 @@ class Parser {
     while (this.match(TokenType.OR)) {
       this.advance();
       const right = this.parseAnd();
-      left = { type: 'binary', op: 'OR', left, right };
+      left = { type: 'binary', operator: 'OR', left, right };
     }
     return left;
   }
@@ -345,7 +325,7 @@ class Parser {
     while (this.match(TokenType.AND)) {
       this.advance();
       const right = this.parseNot();
-      left = { type: 'binary', op: 'AND', left, right };
+      left = { type: 'binary', operator: 'AND', left, right };
     }
     return left;
   }
@@ -354,44 +334,42 @@ class Parser {
     if (this.match(TokenType.NOT)) {
       this.advance();
       const operand = this.parseNot();
-      return { type: 'unary', op: 'NOT', operand };
+      return { type: 'unary', operator: 'NOT', operand };
     }
     return this.parseComparison();
   }
 
   private parseComparison(): Expression {
     const left = this.parsePrimary();
-
-    if (this.match(TokenType.LIKE)) {
-      this.advance();
-      const pattern = this.expect(TokenType.STRING).value;
-      if (left.type !== 'column_ref') {
-        throw new Error('LIKE operator requires a column reference on the left');
-      }
-      return { type: 'like', column: left, pattern };
-    }
-
-    const opMap: Record<string, string> = {
-      [TokenType.EQ]: '=',
-      [TokenType.NEQ]: '!=',
-      [TokenType.LT]: '<',
-      [TokenType.GT]: '>',
-      [TokenType.LTE]: '<=',
-      [TokenType.GTE]: '>=',
-    };
-
-    if (this.current().type in opMap) {
-      const op = opMap[this.current().type];
-      this.advance();
+    if (
+      this.match(
+        TokenType.EQ,
+        TokenType.NEQ,
+        TokenType.LT,
+        TokenType.GT,
+        TokenType.LTE,
+        TokenType.GTE,
+        TokenType.LIKE
+      )
+    ) {
+      const opToken = this.advance();
+      const operatorMap: Record<string, BinaryExpression['operator']> = {
+        [TokenType.EQ]: '=',
+        [TokenType.NEQ]: '!=',
+        [TokenType.LT]: '<',
+        [TokenType.GT]: '>',
+        [TokenType.LTE]: '<=',
+        [TokenType.GTE]: '>=',
+        [TokenType.LIKE]: 'LIKE',
+      };
+      const operator = operatorMap[opToken.type];
       const right = this.parsePrimary();
-      return { type: 'binary', op, left, right };
+      return { type: 'binary', operator, left, right };
     }
-
     return left;
   }
 
   private parsePrimary(): Expression {
-    // Parenthesized expression
     if (this.match(TokenType.LPAREN)) {
       this.advance();
       const expr = this.parseExpression();
@@ -399,40 +377,39 @@ class Parser {
       return expr;
     }
 
-    // Aggregate in expression (for HAVING)
-    if (this.isAggregateFunc(this.current().type)) {
-      const agg = this.parseAggregateColumn();
-      // Wrap aggregate as a special column_ref for evaluation
-      return {
-        type: 'column_ref',
-        name: `__agg__${agg.func}__${agg.arg}`,
-      };
-    }
-
-    // Number literal
-    if (this.match(TokenType.NUMBER)) {
-      const val = this.advance().value;
-      return { type: 'literal', value: Number(val) };
-    }
-
-    // String literal
-    if (this.match(TokenType.STRING)) {
-      const val = this.advance().value;
-      return { type: 'literal', value: val };
-    }
-
-    // Identifier (column ref)
-    if (this.match(TokenType.IDENTIFIER)) {
-      const id = this.advance();
-      if (this.match(TokenType.DOT)) {
+    if (this.isAggregateFunction()) {
+      const func = this.advance().value as AggregateExpression['func'];
+      this.expect(TokenType.LPAREN);
+      let argument: AggregateExpression['argument'];
+      if (this.match(TokenType.STAR)) {
         this.advance();
-        const col = this.expect(TokenType.IDENTIFIER);
-        return { type: 'column_ref', table: id.value, name: col.value };
+        argument = { type: 'star' };
+      } else {
+        const ref = this.parseColumnRef();
+        argument = { type: 'column_ref', table: ref.table, column: ref.column };
       }
-      return { type: 'column_ref', name: id.value };
+      this.expect(TokenType.RPAREN);
+      return { type: 'aggregate', func, argument };
     }
 
-    throw new Error(`Unexpected token: ${this.current().type} (${this.current().value}) at position ${this.pos}`);
+    if (this.match(TokenType.NUMBER)) {
+      const value = parseFloat(this.advance().value);
+      return { type: 'literal', value };
+    }
+
+    if (this.match(TokenType.STRING)) {
+      const value = this.advance().value;
+      return { type: 'literal', value };
+    }
+
+    if (this.match(TokenType.IDENTIFIER)) {
+      const ref = this.parseColumnRef();
+      return { type: 'column_ref', table: ref.table, column: ref.column };
+    }
+
+    throw new Error(
+      `Unexpected token ${this.current().type} ('${this.current().value}') at position ${this.current().position}`
+    );
   }
 }
 

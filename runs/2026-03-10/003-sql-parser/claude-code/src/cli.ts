@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as fs from 'fs';
+import * as path from 'path';
 import { tokenize } from './lexer';
 import { parse } from './parser';
 import { execute } from './executor';
@@ -31,21 +32,20 @@ function main() {
   }
 
   if (!dataFile || !query) {
-    console.error('Usage: jsql --data <JSONファイル> --query "<SQL文>" [--format json]');
+    console.error('Usage: jsql --data <file> --query "<SQL>"');
     process.exit(1);
   }
 
-  const rawData = fs.readFileSync(dataFile, 'utf-8');
-  const data = JSON.parse(rawData);
-
+  const resolvedPath = path.resolve(dataFile);
+  const data = JSON.parse(fs.readFileSync(resolvedPath, 'utf-8'));
   const tokens = tokenize(query);
   const ast = parse(tokens);
-  const results = execute(ast, data);
+  const result = execute(ast, data);
 
   if (format === 'json') {
-    console.log(formatJson(results));
+    console.log(formatJson(result));
   } else {
-    console.log(formatTable(results));
+    console.log(formatTable(result));
   }
 }
 
