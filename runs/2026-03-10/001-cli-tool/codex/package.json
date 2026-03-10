@@ -2,17 +2,18 @@
   "name": "lc-cli",
   "version": "1.0.0",
   "private": true,
+  "description": "CLI tool to count lines in files under a directory.",
   "type": "module",
   "bin": {
-    "lc": "./dist/cli.js"
+    "lc": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lc": "tsx src/cli.ts"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
-    "tsx": "^4.20.0",
-    "typescript": "^5.9.0"
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

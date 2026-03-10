@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-09",
+  "updated": "2026-03-10",
   "tasks_evaluated": 2,
   "overall": [
     {
@@ -7,52 +7,65 @@
       "agent": "codex",
       "tasks": 2,
       "correctness": 5,
-      "code_quality": 4.5,
-      "robustness": 4.25,
+      "code_quality": 5,
+      "robustness": 4,
       "design": 4,
       "comprehension": 5,
-      "total": 22.75
+      "total": 23
     },
     {
       "rank": 2,
       "agent": "claude-code",
       "tasks": 2,
-      "correctness": 4.25,
+      "correctness": 4,
       "code_quality": 4,
-      "robustness": 3.75,
-      "design": 3.75,
-      "comprehension": 4.25,
-      "total": 20
+      "robustness": 4,
+      "design": 4,
+      "comprehension": 5,
+      "total": 21
     }
   ],
   "tasks": [
     {
       "taskId": "2026-03-10/001-cli-tool",
       "judges": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "agents": [
         {
           "agent": "codex",
           "scores": {
             "correctness": 5,
-            "code_quality": 4.5,
+            "code_quality": 5,
             "robustness": 4,
             "design": 4,
             "comprehension": 5,
-            "total": 22.5
+            "total": 23
+          },
+          "meta": {
+            "agent": "codex",
+            "effort": "xhigh",
+            "started_at": "2026-03-10T05:33:06+00:00",
+            "completed_at": "2026-03-10T05:36:30+00:00",
+            "duration_seconds": 204
           }
         },
         {
           "agent": "claude-code",
           "scores": {
-            "correctness": 3.5,
+            "correctness": 4,
             "code_quality": 4,
-            "robustness": 3.5,
-            "design": 3.5,
-            "comprehension": 4,
-            "total": 18.5
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 21
+          },
+          "meta": {
+            "agent": "claude-code",
+            "effort": "max",
+            "started_at": "2026-03-10T05:33:40+00:00",
+            "completed_at": "2026-03-10T05:34:55+00:00",
+            "duration_seconds": 75
           }
         }
       ]
@@ -60,30 +73,43 @@
     {
       "taskId": "2026-03-10/002-wareki",
       "judges": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "agents": [
         {
           "agent": "codex",
           "scores": {
             "correctness": 5,
-            "code_quality": 4.5,
-            "robustness": 4.5,
+            "code_quality": 5,
+            "robustness": 4,
             "design": 4,
             "comprehension": 5,
             "total": 23
+          },
+          "meta": {
+            "agent": "codex",
+            "effort": "xhigh",
+            "started_at": "2026-03-10T05:37:23+00:00",
+            "completed_at": "2026-03-10T05:40:30+00:00",
+            "duration_seconds": 187
           }
         },
         {
           "agent": "claude-code",
           "scores": {
-            "correctness": 5,
+            "correctness": 4,
             "code_quality": 4,
             "robustness": 4,
             "design": 4,
-            "comprehension": 4.5,
-            "total": 21.5
+            "comprehension": 5,
+            "total": 21
+          },
+          "meta": {
+            "agent": "claude-code",
+            "effort": "max",
+            "started_at": "2026-03-10T05:38:30+00:00",
+            "completed_at": "2026-03-10T05:40:00+00:00",
+            "duration_seconds": 90
           }
         }
       ]

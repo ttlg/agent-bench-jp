@@ -2,12 +2,18 @@
   "name": "wareki",
   "version": "1.0.0",
   "private": true,
-  "type": "commonjs",
+  "description": "CLI tool for converting between Gregorian dates and Japanese era dates.",
   "bin": {
-    "wareki": "dist/cli.js"
+    "wareki": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "wareki": "node dist/cli.js"
+    "test": "tsx --test test/**/*.test.ts",
+    "wareki": "tsx src/cli.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
