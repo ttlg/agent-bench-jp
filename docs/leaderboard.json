@@ -5,6 +5,8 @@
     {
       "rank": 1,
       "agent": "codex",
+      "model": "GPT-5.4",
+      "effort": "xhigh",
       "tasks": 3,
       "correctness": 4.67,
       "code_quality": 5,
@@ -16,6 +18,8 @@
     {
       "rank": 2,
       "agent": "claude-code",
+      "model": "Opus 4.6",
+      "effort": "max",
       "tasks": 3,
       "correctness": 4.33,
       "code_quality": 4.33,
@@ -44,6 +48,7 @@
           },
           "meta": {
             "agent": "claude-code",
+            "model": "Opus 4.6",
             "effort": "max",
             "started_at": "2026-03-10T06:29:15+00:00",
             "completed_at": "2026-03-10T06:30:43+00:00",
@@ -62,6 +67,7 @@
           },
           "meta": {
             "agent": "codex",
+            "model": "GPT-5.4",
             "effort": "xhigh",
             "started_at": "2026-03-10T05:33:06+00:00",
             "completed_at": "2026-03-10T05:36:30+00:00",
@@ -88,6 +94,7 @@
           },
           "meta": {
             "agent": "codex",
+            "model": "GPT-5.4",
             "effort": "xhigh",
             "started_at": "2026-03-10T05:37:23+00:00",
             "completed_at": "2026-03-10T05:40:30+00:00",
@@ -106,6 +113,7 @@
           },
           "meta": {
             "agent": "claude-code",
+            "model": "Opus 4.6",
             "effort": "max",
             "started_at": "2026-03-10T06:33:07+00:00",
             "completed_at": "2026-03-10T06:35:33+00:00",
@@ -132,6 +140,7 @@
           },
           "meta": {
             "agent": "codex",
+            "model": "GPT-5.4",
             "effort": "xhigh",
             "started_at": "2026-03-10T05:54:15+00:00",
             "completed_at": "2026-03-10T06:04:38+00:00",
@@ -150,6 +159,7 @@
           },
           "meta": {
             "agent": "claude-code",
+            "model": "Opus 4.6",
             "effort": "max",
             "started_at": "2026-03-10T06:14:19+00:00",
             "completed_at": "2026-03-10T06:25:14+00:00",
