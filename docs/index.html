@@ -150,8 +150,9 @@ function render(data){
         <div>`;
     sortAgents(t.agents).forEach(a=>{
       const ac=agentColor(a.agent);
+      const aLabel=a.meta?`${a.agent} (${a.meta.model} ${a.meta.effort})`:a.agent;
       html+=`<div class="agent-detail">
-        <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${a.agent}</span>
+        <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${aLabel}</span>
         <span class="agent-detail-total">${a.scores.total}点</span></div>`;
       DIMENSIONS.forEach(d=>{
         const pct=(a.scores[d]/5*100).toFixed(1);
@@ -160,9 +161,7 @@ function render(data){
           <span class="score-num">${a.scores[d]}</span></div>`;
       });
       if(a.meta){
-        html+=`<div class="meta-tags">`;
-        if(a.meta.model) html+=`<span class="meta-tag">🤖 ${a.meta.model}</span>`;
-        html+=`<span class="meta-tag">⚡ effort: ${a.meta.effort}</span>
+        html+=`<div class="meta-tags">
           <span class="meta-tag">⏱ ${formatDuration(a.meta.duration_seconds)}</span></div>`;
       }
       html+=`</div>`;
@@ -179,7 +178,7 @@ function render(data){
     new Chart(ctxO,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
       datasets:sortAgents(data.overall).map(r=>{const c=agentColor(r.agent);return{
-        label:r.agent,
+        label:r.model?`${r.agent} (${r.model} ${r.effort||''})`:r.agent,
         data:DIMENSIONS.map(d=>r[d]),
         borderColor:c,backgroundColor:c+'22',
         borderWidth:2,pointRadius:3,pointBackgroundColor:c
@@ -194,7 +193,7 @@ function render(data){
     new Chart(ctx,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
       datasets:sortAgents(t.agents).map(a=>{const c=agentColor(a.agent);return{
-        label:a.agent,
+        label:a.meta?`${a.agent} (${a.meta.model} ${a.meta.effort})`:a.agent,
         data:DIMENSIONS.map(d=>a.scores[d]),
         borderColor:c,backgroundColor:c+'22',
         borderWidth:2,pointRadius:3,pointBackgroundColor:c
