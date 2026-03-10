@@ -1,32 +1,32 @@
 {
   "updated": "2026-03-10",
-  "tasks_evaluated": 3,
+  "tasks_evaluated": 4,
   "overall": [
     {
       "rank": 1,
       "agent": "codex",
       "model": "GPT-5.4",
       "effort": "xhigh",
-      "tasks": 3,
-      "correctness": 4.67,
+      "tasks": 4,
+      "correctness": 4.75,
       "code_quality": 5,
       "robustness": 4,
-      "design": 4.33,
+      "design": 4.5,
       "comprehension": 5,
-      "total": 23
+      "total": 23.25
     },
     {
       "rank": 2,
       "agent": "claude-code",
       "model": "Opus 4.6",
       "effort": "max",
-      "tasks": 3,
-      "correctness": 4.33,
-      "code_quality": 4.33,
-      "robustness": 3.67,
+      "tasks": 4,
+      "correctness": 4.5,
+      "code_quality": 4.25,
+      "robustness": 3.75,
       "design": 4,
-      "comprehension": 4.33,
-      "total": 20.67
+      "comprehension": 4.5,
+      "total": 21
     }
   ],
   "tasks": [
@@ -164,6 +164,52 @@
             "started_at": "2026-03-10T06:14:19+00:00",
             "completed_at": "2026-03-10T06:25:14+00:00",
             "duration_seconds": 655
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-10/004-lisp-interpreter",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "codex",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 5,
+            "robustness": 4,
+            "design": 5,
+            "comprehension": 5,
+            "total": 24
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "xhigh",
+            "started_at": "2026-03-10T06:52:05+00:00",
+            "completed_at": "2026-03-10T06:58:51+00:00",
+            "duration_seconds": 406
+          }
+        },
+        {
+          "agent": "claude-code",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "max",
+            "started_at": "2026-03-10T06:53:00+00:00",
+            "completed_at": "2026-03-10T07:04:12+00:00",
+            "duration_seconds": 672
           }
         }
       ]
