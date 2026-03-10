@@ -11,70 +11,29 @@ interface Options {
 }
 
 interface FileCount {
-  file: string;
+  filePath: string;
   lines: number;
 }
 
+const SKIP_DIRS = new Set(["node_modules", ".git", "dist"]);
+
 function parseArgs(args: string[]): Options {
   const opts: Options = { dir: ".", sort: false, total: false };
-
-  for (let i = 0; i < args.length; i++) {
+  let i = 0;
+  while (i < args.length) {
     const arg = args[i];
-    if (arg === "--ext") {
-      const val = args[++i];
-      if (!val) {
-        console.error("Error: --ext requires a value");
-        process.exit(1);
-      }
-      opts.ext = val.startsWith(".") ? val : `.${val}`;
+    if (arg === "--ext" && i + 1 < args.length) {
+      opts.ext = args[++i].startsWith(".") ? args[i] : `.${args[i]}`;
     } else if (arg === "--sort") {
       opts.sort = true;
     } else if (arg === "--total") {
       opts.total = true;
-    } else if (arg === "--help" || arg === "-h") {
-      printHelp();
-      process.exit(0);
     } else if (!arg.startsWith("-")) {
       opts.dir = arg;
-    } else {
-      console.error(`Unknown option: ${arg}`);
-      process.exit(1);
     }
+    i++;
   }
   return opts;
-}
-
-function printHelp(): void {
-  console.log(`Usage: lc [directory] [options]
-
-Options:
-  --ext <ext>   Count only files with the given extension (e.g. --ext .ts)
-  --sort        Sort by line count (descending)
-  --total       Show total line count
-  -h, --help    Show this help`);
-}
-
-function collectFiles(dir: string, ext?: string): string[] {
-  const results: string[] = [];
-
-  function walk(currentDir: string): void {
-    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (entry.name.startsWith(".") || entry.name === "node_modules") {
-        continue;
-      }
-      const fullPath = path.join(currentDir, entry.name);
-      if (entry.isDirectory()) {
-        walk(fullPath);
-      } else if (entry.isFile()) {
-        if (ext && path.extname(entry.name) !== ext) continue;
-        results.push(fullPath);
-      }
-    }
-  }
-
-  walk(dir);
-  return results;
 }
 
 function countLines(filePath: string): number {
@@ -83,7 +42,30 @@ function countLines(filePath: string): number {
   return content.split("\n").length;
 }
 
-function main(): void {
+function collectFiles(dir: string, ext?: string): FileCount[] {
+  const results: FileCount[] = [];
+
+  function walk(currentDir: string) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.name.startsWith(".")) continue;
+      if (SKIP_DIRS.has(entry.name)) continue;
+
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+      } else if (entry.isFile()) {
+        if (ext && path.extname(entry.name) !== ext) continue;
+        results.push({ filePath: fullPath, lines: countLines(fullPath) });
+      }
+    }
+  }
+
+  walk(dir);
+  return results;
+}
+
+function main() {
   const opts = parseArgs(process.argv.slice(2));
   const resolvedDir = path.resolve(opts.dir);
 
@@ -92,33 +74,35 @@ function main(): void {
     process.exit(1);
   }
 
-  const files = collectFiles(resolvedDir, opts.ext);
+  let files = collectFiles(resolvedDir, opts.ext);
+
   if (files.length === 0) {
     console.log("No files found.");
     return;
   }
 
-  let counts: FileCount[] = files.map((f) => ({
-    file: path.relative(resolvedDir, f),
-    lines: countLines(f),
-  }));
-
   if (opts.sort) {
-    counts.sort((a, b) => b.lines - a.lines);
+    files.sort((a, b) => b.lines - a.lines);
   }
 
-  const maxPath = Math.max(...counts.map((c) => c.file.length));
-  const maxNum = Math.max(...counts.map((c) => String(c.lines).length));
+  // Calculate column widths
+  const displayPaths = files.map((f) => path.relative(resolvedDir, f.filePath));
+  const maxPathLen = Math.max(...displayPaths.map((p) => p.length));
+  const maxLineLen = Math.max(...files.map((f) => String(f.lines).length));
 
-  for (const c of counts) {
-    console.log(`${c.file.padEnd(maxPath)}  ${String(c.lines).padStart(maxNum)}`);
+  for (let i = 0; i < files.length; i++) {
+    const p = displayPaths[i].padEnd(maxPathLen);
+    const l = String(files[i].lines).padStart(maxLineLen);
+    console.log(`${p}  ${l}`);
   }
 
   if (opts.total) {
-    const total = counts.reduce((sum, c) => sum + c.lines, 0);
-    const lineWidth = maxPath + 2 + maxNum;
-    console.log("─".repeat(lineWidth));
-    console.log(`${"合計".padEnd(maxPath)}  ${String(total).padStart(maxNum)}`);
+    const totalLines = files.reduce((sum, f) => sum + f.lines, 0);
+    const separator = "─".repeat(maxPathLen + 2 + maxLineLen);
+    console.log(separator);
+    console.log(
+      `${"合計".padEnd(maxPathLen - 2)}  ${String(totalLines).padStart(maxLineLen)}`
+    );
   }
 }
 
