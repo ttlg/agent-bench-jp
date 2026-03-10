@@ -2,20 +2,20 @@
   "name": "lc-tool",
   "version": "1.0.0",
   "description": "CLI tool to count lines in files",
-  "main": "dist/lc.js",
+  "main": "dist/cli.js",
   "bin": {
-    "lc": "dist/lc.js"
+    "lc": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
-    "lc": "tsc && node dist/lc.js"
+    "lc": "node dist/cli.js"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.4.0",
     "typescript": "^5.9.3"
   }
 }

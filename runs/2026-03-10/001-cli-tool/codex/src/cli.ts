@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readdir, readFile } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 type Options = {
@@ -10,23 +10,25 @@ type Options = {
   total: boolean;
 };
 
-type CountResult = {
+type FileCount = {
   path: string;
   lines: number;
 };
 
+const IGNORED_DIRECTORY_NAMES = new Set(["node_modules"]);
+
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
-  const baseDir = path.resolve(options.directory);
-  const results = await collectLineCounts(baseDir, options.ext);
+  const targetDirectory = path.resolve(process.cwd(), options.directory);
 
-  if (options.sort) {
-    results.sort((a, b) => b.lines - a.lines || a.path.localeCompare(b.path));
-  } else {
-    results.sort((a, b) => a.path.localeCompare(b.path));
-  }
+  await assertDirectory(targetDirectory);
 
-  printResults(results, options.total);
+  const counts = await collectFileCounts(targetDirectory, targetDirectory, options.ext);
+  const rows = options.sort
+    ? [...counts].sort((left, right) => right.lines - left.lines || left.path.localeCompare(right.path))
+    : counts;
+
+  printRows(rows, options.total);
 }
 
 function parseArgs(args: string[]): Options {
@@ -41,9 +43,10 @@ function parseArgs(args: string[]): Options {
     if (arg === "--ext") {
       const value = args[index + 1];
       if (!value) {
-        throw new Error("--ext には拡張子を指定してください。例: --ext .ts");
+        throw new Error("--ext には拡張子を指定してください。");
       }
-      ext = value.startsWith(".") ? value : `.${value}`;
+
+      ext = normalizeExtension(value);
       index += 1;
       continue;
     }
@@ -58,8 +61,17 @@ function parseArgs(args: string[]): Options {
       continue;
     }
 
+    if (arg === "--help" || arg === "-h") {
+      printHelp();
+      process.exit(0);
+    }
+
     if (arg.startsWith("--")) {
       throw new Error(`不明なオプションです: ${arg}`);
+    }
+
+    if (directory !== ".") {
+      throw new Error("ディレクトリは 1 つだけ指定してください。");
     }
 
     directory = arg;
@@ -68,24 +80,37 @@ function parseArgs(args: string[]): Options {
   return { directory, ext, sort, total };
 }
 
-async function collectLineCounts(baseDir: string, ext?: string): Promise<CountResult[]> {
-  const results: CountResult[] = [];
-  await walk(baseDir, baseDir, ext, results);
-  return results;
+function normalizeExtension(value: string): string {
+  return value.startsWith(".") ? value : `.${value}`;
 }
 
-async function walk(currentDir: string, baseDir: string, ext: string | undefined, results: CountResult[]): Promise<void> {
-  const entries = await readdir(currentDir, { withFileTypes: true });
+async function assertDirectory(directoryPath: string): Promise<void> {
+  const stats = await stat(directoryPath).catch(() => {
+    throw new Error(`ディレクトリが見つかりません: ${directoryPath}`);
+  });
+
+  if (!stats.isDirectory()) {
+    throw new Error(`ディレクトリを指定してください: ${directoryPath}`);
+  }
+}
+
+async function collectFileCounts(
+  currentDirectory: string,
+  rootDirectory: string,
+  ext?: string,
+): Promise<FileCount[]> {
+  const entries = await readdir(currentDirectory, { withFileTypes: true });
+  const results: FileCount[] = [];
 
   for (const entry of entries) {
-    if (entry.name.startsWith(".") || entry.name === "node_modules") {
+    if (shouldIgnore(entry.name)) {
       continue;
     }
 
-    const fullPath = path.join(currentDir, entry.name);
+    const fullPath = path.join(currentDirectory, entry.name);
 
     if (entry.isDirectory()) {
-      await walk(fullPath, baseDir, ext, results);
+      results.push(...(await collectFileCounts(fullPath, rootDirectory, ext)));
       continue;
     }
 
@@ -97,54 +122,73 @@ async function walk(currentDir: string, baseDir: string, ext: string | undefined
       continue;
     }
 
-    const content = await readFile(fullPath, "utf8");
-    const relativePath = path.relative(baseDir, fullPath) || entry.name;
-
     results.push({
-      path: relativePath,
-      lines: countLines(content)
+      path: formatRelativePath(rootDirectory, fullPath),
+      lines: await countLines(fullPath),
     });
   }
+
+  return results;
 }
 
-function countLines(content: string): number {
-  if (content.length === 0) {
+function shouldIgnore(name: string): boolean {
+  if (name.startsWith(".")) {
+    return true;
+  }
+
+  return IGNORED_DIRECTORY_NAMES.has(name);
+}
+
+function formatRelativePath(rootDirectory: string, filePath: string): string {
+  return path.relative(rootDirectory, filePath).split(path.sep).join("/");
+}
+
+async function countLines(filePath: string): Promise<number> {
+  const buffer = await readFile(filePath);
+
+  if (buffer.length === 0) {
     return 0;
   }
 
-  const newlineCount = content.match(/\r\n|\r|\n/g)?.length ?? 0;
-  return /(?:\r\n|\r|\n)$/.test(content) ? newlineCount : newlineCount + 1;
+  let lines = 0;
+
+  for (const byte of buffer) {
+    if (byte === 0x0a) {
+      lines += 1;
+    }
+  }
+
+  return buffer[buffer.length - 1] === 0x0a ? lines : lines + 1;
 }
 
-function printResults(results: CountResult[], showTotal: boolean): void {
-  if (results.length === 0) {
+function printRows(rows: FileCount[], showTotal: boolean): void {
+  if (rows.length === 0) {
     if (showTotal) {
-      console.log("合計 0");
+      console.log("合計  0");
     }
     return;
   }
 
-  const lineWidth = Math.max(...results.map((result) => String(result.lines).length));
-  const pathWidth = Math.max(...results.map((result) => result.path.length));
+  const total = rows.reduce((sum, row) => sum + row.lines, 0);
+  const pathWidth = Math.max(...rows.map((row) => row.path.length), showTotal ? "合計".length : 0);
+  const countWidth = Math.max(...rows.map((row) => String(row.lines).length), showTotal ? String(total).length : 0);
 
-  for (const result of results) {
-    const filePath = result.path.padEnd(pathWidth, " ");
-    const lines = String(result.lines).padStart(lineWidth, " ");
-    console.log(`${filePath}  ${lines}`);
+  for (const row of rows) {
+    console.log(`${row.path.padEnd(pathWidth)}  ${String(row.lines).padStart(countWidth)}`);
   }
 
-  if (!showTotal) {
-    return;
+  if (showTotal) {
+    console.log(`${"─".repeat(pathWidth)}  ${"─".repeat(countWidth)}`);
+    console.log(`${"合計".padEnd(pathWidth)}  ${String(total).padStart(countWidth)}`);
   }
+}
 
-  const total = results.reduce((sum, result) => sum + result.lines, 0);
-  const separatorWidth = Math.max(pathWidth + lineWidth + 2, `合計 ${total}`.length);
-  console.log("─".repeat(separatorWidth));
-  console.log(`合計 ${total}`);
+function printHelp(): void {
+  console.log("使い方: lc [directory] [--ext <拡張子>] [--sort] [--total]");
 }
 
 main().catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);
-  console.error(message);
-  process.exitCode = 1;
+  console.error(`Error: ${message}`);
+  process.exit(1);
 });

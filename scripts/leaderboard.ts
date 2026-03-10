@@ -13,6 +13,15 @@ interface Judgment {
   total: number;
   reasoning: string;
   judge?: string;
+  judged_at?: string;
+}
+
+interface AgentMeta {
+  agent: string;
+  effort: string;
+  started_at: string;
+  completed_at: string;
+  duration_seconds: number;
 }
 
 interface Scores {
@@ -42,7 +51,7 @@ function avgScores(judgments: Judgment[]): Scores {
 interface TaskResult {
   taskId: string;
   judges: string[];
-  agents: { agent: string; scores: Scores }[];
+  agents: { agent: string; scores: Scores; meta?: AgentMeta }[];
 }
 
 async function main() {
@@ -54,6 +63,8 @@ async function main() {
     string,
     Map<string, Map<string, Judgment>>
   >();
+  // Collect per-task meta: taskId -> agent -> AgentMeta
+  const taskMeta = new Map<string, Map<string, AgentMeta>>();
 
   const dates = await readdir(runsDir).catch(() => []);
   for (const date of dates) {
@@ -64,7 +75,24 @@ async function main() {
     for (const task of tasks) {
       if (task.startsWith(".")) continue;
       const taskId = `${date}/${task}`;
-      const judgmentsPath = join(datePath, task, "judgments");
+      const taskPath = join(datePath, task);
+
+      // Read agent meta.json files
+      const taskEntries = await readdir(taskPath).catch(() => []);
+      for (const entry of taskEntries) {
+        if (entry.startsWith(".") || entry === "judgments") continue;
+        const metaPath = join(taskPath, entry, "meta.json");
+        try {
+          const metaContent = await readFile(metaPath, "utf-8");
+          const meta: AgentMeta = JSON.parse(metaContent);
+          if (!taskMeta.has(taskId)) taskMeta.set(taskId, new Map());
+          taskMeta.get(taskId)!.set(entry, meta);
+        } catch {
+          // meta.json not found, skip
+        }
+      }
+
+      const judgmentsPath = join(taskPath, "judgments");
       const agentDirs = await readdir(judgmentsPath).catch(() => []);
 
       for (const agentName of agentDirs) {
@@ -103,7 +131,8 @@ async function main() {
       const judgments = [...judgeMap.values()];
       for (const j of judgeMap.keys()) judges.add(j);
 
-      agents.push({ agent: agentName, scores: avgScores(judgments) });
+      const meta = taskMeta.get(taskId)?.get(agentName);
+      agents.push({ agent: agentName, scores: avgScores(judgments), ...(meta ? { meta } : {}) });
 
       if (!overallAgents.has(agentName)) overallAgents.set(agentName, []);
       overallAgents.get(agentName)!.push(...judgments);
