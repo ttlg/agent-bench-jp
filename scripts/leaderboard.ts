@@ -167,10 +167,9 @@ async function main() {
     tasks: taskResults,
   };
 
-  await writeFile(
-    join(resultsDir, "leaderboard.json"),
-    JSON.stringify(result, null, 2) + "\n"
-  );
+  const jsonStr = JSON.stringify(result, null, 2) + "\n";
+  await writeFile(join(resultsDir, "leaderboard.json"), jsonStr);
+  await writeFile(join(__dirname, "..", "docs", "leaderboard.json"), jsonStr);
 
   // Print overall
   console.log("\n## Overall\n");

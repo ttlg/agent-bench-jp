@@ -209,7 +209,7 @@ function radarOpts(){
   };
 }
 
-fetch('../results/leaderboard.json')
+fetch('leaderboard.json')
   .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
   .then(render)
   .catch(e=>{document.getElementById('app').innerHTML=`<div class="error">データの読み込みに失敗しました: ${e.message}</div>`});
