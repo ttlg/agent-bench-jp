@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 18,
+  "reasoning": "全30テストが通り、SELECT/WHERE/ORDER BY/LIMIT/OFFSET/JOIN/集約関数/GROUP BY/HAVINGの基本機能は正しく動作する。しかし、タスク要件に明記されている「エイリアス付きカラム参照」(SELECT name AS user_name)がSELECT句で未実装であり、実行するとクラッシュする。これは正確性において大きな欠陥。コード品質はlexer/parser/executor/formatterの分離が明確で、TypeScriptの型付けも適切。堅牢性については、CLIの引数不足時にはUsageを表示するが、SQLパースエラー時にスタックトレースがそのまま表示され、ユーザーフレンドリーでない。また LIKE の _ ワイルドカード未対応。設計はAST設計が明瞭で、JOINのカラム解決ロジックも適切だが、HAVINGでの__agg__プレフィックスハックはやや粗い。指示理解は概ね正確で、日本語データでのテストやマルチバイト文字対応のformatterなど配慮が見られるが、カラムエイリアスの見落としが惜しい。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-10T06:09:06+00:00",
+  "duration_seconds": 199
+}

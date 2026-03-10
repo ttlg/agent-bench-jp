@@ -1,0 +1,7 @@
+{
+  "id": "003",
+  "name": "SQLパーサー＆実行エンジン",
+  "category": "generation",
+  "difficulty": "hard",
+  "language": "typescript"
+}
