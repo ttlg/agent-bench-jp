@@ -18,6 +18,7 @@ interface Judgment {
 
 interface AgentMeta {
   agent: string;
+  model: string;
   effort: string;
   started_at: string;
   completed_at: string;
@@ -122,6 +123,8 @@ async function main() {
   const taskResults: TaskResult[] = [];
   // For overall aggregation: agent -> all judgments
   const overallAgents = new Map<string, Judgment[]>();
+  // For overall: agent -> model/effort from first meta found
+  const overallMeta = new Map<string, { model?: string; effort?: string }>();
 
   for (const [taskId, agentMap] of taskData) {
     const judges = new Set<string>();
@@ -136,6 +139,9 @@ async function main() {
 
       if (!overallAgents.has(agentName)) overallAgents.set(agentName, []);
       overallAgents.get(agentName)!.push(...judgments);
+      if (meta && !overallMeta.has(agentName)) {
+        overallMeta.set(agentName, { model: meta.model, effort: meta.effort });
+      }
     }
 
     agents.sort((a, b) => b.scores.total - a.scores.total);
@@ -150,6 +156,7 @@ async function main() {
   const overall = [...overallAgents.entries()]
     .map(([agent, judgments]) => ({
       agent,
+      ...overallMeta.get(agent),
       tasks: new Set(
         taskResults
           .filter((t) => t.agents.some((a) => a.agent === agent))

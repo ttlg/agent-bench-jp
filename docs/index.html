@@ -122,7 +122,8 @@ function render(data){
   html+=`<th>合計</th></tr>`;
   data.overall.forEach(r=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
-    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}</td><td>${r.tasks}</td>`;
+    const detail=r.model?` <span style="color:var(--text-muted);font-weight:400;font-size:.8rem">(${r.model} ${r.effort||''})</span>`:'';
+    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}${detail}</td><td>${r.tasks}</td>`;
     DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,COLORS[i])}</td>`});
     html+=`<td class="total-cell">${r.total}</td></tr>`;
   });
@@ -151,8 +152,9 @@ function render(data){
           <span class="score-num">${a.scores[d]}</span></div>`;
       });
       if(a.meta){
-        html+=`<div class="meta-tags">
-          <span class="meta-tag">⚡ effort: ${a.meta.effort}</span>
+        html+=`<div class="meta-tags">`;
+        if(a.meta.model) html+=`<span class="meta-tag">🤖 ${a.meta.model}</span>`;
+        html+=`<span class="meta-tag">⚡ effort: ${a.meta.effort}</span>
           <span class="meta-tag">⏱ ${formatDuration(a.meta.duration_seconds)}</span></div>`;
       }
       html+=`</div>`;

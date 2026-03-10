@@ -1,5 +1,6 @@
 {
   "agent": "codex",
+  "model": "GPT-5.4",
   "effort": "xhigh",
   "started_at": "2026-03-10T05:37:23+00:00",
   "completed_at": "2026-03-10T05:40:30+00:00",
