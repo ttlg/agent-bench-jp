@@ -1,0 +1,22 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "description": "SQL parser & execution engine for JSON data",
+  "main": "dist/index.js",
+  "bin": {
+    "jsql": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "jsql": "node dist/index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}

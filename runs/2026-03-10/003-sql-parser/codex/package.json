@@ -1,0 +1,19 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "jsql": "./bin/jsql.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "jsql": "node ./bin/jsql.js",
+    "test": "node --import tsx --test tests/**/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
