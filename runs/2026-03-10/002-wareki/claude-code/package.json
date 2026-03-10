@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "wareki": "tsc && node dist/wareki.js"
+    "wareki": "node dist/wareki.js",
+    "test": "node test/test.js"
   },
   "keywords": [],
   "author": "",
