@@ -1,0 +1,19 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "description": "SQL parser and execution engine for JSON data",
+  "main": "dist/index.js",
+  "bin": {
+    "jsql": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "test": "tsc && node --test dist/test.js",
+    "dev": "ts-node src/cli.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
