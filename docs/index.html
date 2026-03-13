@@ -127,7 +127,7 @@ function render(data){
     <tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
   DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
   html+=`<th>合計</th></tr>`;
-  sortAgents(data.overall).forEach((r,ri)=>{
+  data.overall.forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
     const detail=r.model?` <span style="color:var(--text-muted);font-weight:400;font-size:.8rem">(${r.model} ${r.effort||''})</span>`:'';
     html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}${detail}</td><td>${r.tasks}</td>`;
@@ -177,7 +177,7 @@ function render(data){
   if(ctxO){
     new Chart(ctxO,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:sortAgents(data.overall).map(r=>{const c=agentColor(r.agent);return{
+      datasets:data.overall.map(r=>{const c=agentColor(r.agent);return{
         label:r.model?`${r.agent} (${r.model} ${r.effort||''})`:r.agent,
         data:DIMENSIONS.map(d=>r[d]),
         borderColor:c,backgroundColor:c+'22',
