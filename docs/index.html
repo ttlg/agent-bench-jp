@@ -110,6 +110,13 @@ function formatDuration(s){
 
 function extractTaskName(id){return id.split('/').pop()||id}
 
+function agentLabel(agent,model,effort){
+  if(!model)return agent;
+  let base=agent;
+  if(effort&&base.endsWith('-'+effort))base=base.slice(0,-(effort.length+1));
+  return `${base}-${model.toLowerCase().replace(/\s+/g,'-')}-${effort||''}`.replace(/-$/,'');
+}
+
 function renderScoreBar(val,max=5,color='var(--accent)'){
   const pct=(val/max*100).toFixed(1);
   return `<div class="score-bar-wrap">
@@ -129,8 +136,8 @@ function render(data){
   html+=`<th>合計</th></tr>`;
   data.overall.forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
-    const detail=r.model?` <span style="color:var(--text-muted);font-weight:400;font-size:.8rem">(${r.model} ${r.effort||''})</span>`:'';
-    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${r.agent}${detail}</td><td>${r.tasks}</td>`;
+    const label=agentLabel(r.agent,r.model,r.effort);
+    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td><td>${r.tasks}</td>`;
     DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,agentColor(r.agent))}</td>`});
     html+=`<td class="total-cell">${r.total}</td></tr>`;
   });
@@ -165,7 +172,7 @@ function render(data){
         <div>`;
     sortAgents(t.agents).forEach(a=>{
       const ac=agentColor(a.agent);
-      const aLabel=a.meta?`${a.agent} (${a.meta.model} ${a.meta.effort})`:a.agent;
+      const aLabel=agentLabel(a.agent,a.meta?.model,a.meta?.effort);
       html+=`<div class="agent-detail">
         <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${aLabel}</span>
         <span class="agent-detail-total">${a.scores.total}点</span></div>`;
@@ -193,7 +200,7 @@ function render(data){
     new Chart(ctxO,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
       datasets:data.overall.map(r=>{const c=agentColor(r.agent);return{
-        label:r.model?`${r.agent} (${r.model} ${r.effort||''})`:r.agent,
+        label:agentLabel(r.agent,r.model,r.effort),
         data:DIMENSIONS.map(d=>r[d]),
         borderColor:c,backgroundColor:c+'22',
         borderWidth:2,pointRadius:3,pointBackgroundColor:c
@@ -208,7 +215,7 @@ function render(data){
     new Chart(ctx,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
       datasets:sortAgents(t.agents).map(a=>{const c=agentColor(a.agent);return{
-        label:a.meta?`${a.agent} (${a.meta.model} ${a.meta.effort})`:a.agent,
+        label:agentLabel(a.agent,a.meta?.model,a.meta?.effort),
         data:DIMENSIONS.map(d=>a.scores[d]),
         borderColor:c,backgroundColor:c+'22',
         borderWidth:2,pointRadius:3,pointBackgroundColor:c
