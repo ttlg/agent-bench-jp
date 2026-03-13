@@ -139,12 +139,27 @@ function render(data){
   // Radar chart section
   html+=`<section><h2>総合スコア比較</h2><div style="max-width:480px;margin:0 auto"><canvas id="radarOverall"></canvas></div></section>`;
 
-  // Task details
-  html+=`<section><h2>タスク別詳細</h2>`;
-  data.tasks.forEach((t,ti)=>{
+  // Task details — merge tasks with the same name across run dates
+  const tasksByName=new Map();
+  data.tasks.forEach(t=>{
     const name=extractTaskName(t.taskId);
-    html+=`<div class="task-card"><h3>${name}</h3>
-      <div class="task-meta-line">ID: ${t.taskId}　｜　ジャッジ: ${t.judges.join(', ')}</div>
+    if(!tasksByName.has(name)){
+      tasksByName.set(name,{name,taskIds:[t.taskId],judges:new Set(t.judges),agents:[]});
+    } else {
+      tasksByName.get(name).taskIds.push(t.taskId);
+      t.judges.forEach(j=>tasksByName.get(name).judges.add(j));
+    }
+    t.agents.forEach(a=>{
+      const existing=tasksByName.get(name).agents;
+      if(!existing.find(e=>e.agent===a.agent))existing.push(a);
+    });
+  });
+  const mergedTasks=[...tasksByName.values()];
+
+  html+=`<section><h2>タスク別詳細</h2>`;
+  mergedTasks.forEach((t,ti)=>{
+    html+=`<div class="task-card"><h3>${t.name}</h3>
+      <div class="task-meta-line">ID: ${t.taskIds.join(', ')}　｜　ジャッジ: ${[...t.judges].join(', ')}</div>
       <div class="task-content">
         <div class="chart-wrap"><canvas id="radar-${ti}"></canvas></div>
         <div>`;
@@ -187,7 +202,7 @@ function render(data){
   }
 
   // Draw per-task radars
-  data.tasks.forEach((t,ti)=>{
+  mergedTasks.forEach((t,ti)=>{
     const ctx=document.getElementById(`radar-${ti}`);
     if(!ctx)return;
     new Chart(ctx,{type:'radar',data:{
