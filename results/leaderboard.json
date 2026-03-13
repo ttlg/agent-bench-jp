@@ -43,6 +43,19 @@
     },
     {
       "rank": 4,
+      "agent": "claude-code-low",
+      "model": "Opus 4.6",
+      "effort": "low",
+      "tasks": 1,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3,
+      "design": 4,
+      "comprehension": 4,
+      "total": 19
+    },
+    {
+      "rank": 5,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
@@ -263,6 +276,25 @@
             "started_at": "2026-03-13T14:53:58Z",
             "completed_at": "2026-03-13T14:55:21Z",
             "duration_seconds": 83
+          }
+        },
+        {
+          "agent": "claude-code-low",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "low",
+            "started_at": "2026-03-13T15:00:10Z",
+            "completed_at": "2026-03-13T15:01:05Z",
+            "duration_seconds": 55
           }
         },
         {
