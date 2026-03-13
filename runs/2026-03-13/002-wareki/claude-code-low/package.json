@@ -1,0 +1,21 @@
+{
+  "name": "jp-bench-002-low-ecjtvz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/wareki.js",
+  "bin": {
+    "wareki": "dist/wareki.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "wareki": "tsc && node dist/wareki.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
+  }
+}
