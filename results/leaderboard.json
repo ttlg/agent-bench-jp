@@ -1,6 +1,6 @@
 {
   "updated": "2026-03-13",
-  "tasks_evaluated": 7,
+  "tasks_evaluated": 8,
   "overall": [
     {
       "rank": 1,
@@ -20,13 +20,13 @@
       "agent": "claude-code-high",
       "model": "Opus 4.6",
       "effort": "high",
-      "tasks": 3,
-      "correctness": 4.67,
-      "code_quality": 4.33,
-      "robustness": 3.67,
+      "tasks": 4,
+      "correctness": 4.75,
+      "code_quality": 4.25,
+      "robustness": 3.75,
       "design": 4,
-      "comprehension": 4.67,
-      "total": 21.33
+      "comprehension": 4.75,
+      "total": 21.5
     },
     {
       "rank": 3,
@@ -43,29 +43,29 @@
     },
     {
       "rank": 4,
-      "agent": "claude-code-low",
-      "model": "Opus 4.6",
-      "effort": "low",
-      "tasks": 3,
-      "correctness": 4.33,
-      "code_quality": 4,
-      "robustness": 3.67,
-      "design": 4,
-      "comprehension": 4.33,
-      "total": 20.33
-    },
-    {
-      "rank": 5,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
-      "tasks": 3,
-      "correctness": 4,
+      "tasks": 4,
+      "correctness": 4.25,
       "code_quality": 4,
-      "robustness": 3.33,
+      "robustness": 3.5,
       "design": 4,
-      "comprehension": 4,
-      "total": 19.33
+      "comprehension": 4.25,
+      "total": 20
+    },
+    {
+      "rank": 5,
+      "agent": "claude-code-low",
+      "model": "Opus 4.6",
+      "effort": "low",
+      "tasks": 4,
+      "correctness": 4,
+      "code_quality": 3.75,
+      "robustness": 3.75,
+      "design": 3.75,
+      "comprehension": 4.25,
+      "total": 19.5
     }
   ],
   "tasks": [
@@ -444,6 +444,71 @@
             "started_at": "2026-03-13T15:27:04Z",
             "completed_at": "2026-03-13T15:31:09Z",
             "duration_seconds": 245
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-13/004-lisp-interpreter",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "claude-code-high",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-13T16:01:50Z",
+            "completed_at": "2026-03-13T16:14:02Z",
+            "duration_seconds": 732
+          }
+        },
+        {
+          "agent": "claude-code-low",
+          "scores": {
+            "correctness": 3,
+            "code_quality": 3,
+            "robustness": 4,
+            "design": 3,
+            "comprehension": 4,
+            "total": 17
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "low",
+            "started_at": "2026-03-13T16:02:02Z",
+            "completed_at": "2026-03-13T16:12:32Z",
+            "duration_seconds": 630
+          }
+        },
+        {
+          "agent": "claude-code-medium",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "medium",
+            "started_at": "2026-03-13T16:01:58Z",
+            "completed_at": "2026-03-13T16:04:47Z",
+            "duration_seconds": 169
           }
         }
       ]
