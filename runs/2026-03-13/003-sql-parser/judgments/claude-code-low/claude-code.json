@@ -1,0 +1,11 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "全25テストが通り、要求されたSQL構文（SELECT, WHERE, JOIN, ORDER BY, LIMIT/OFFSET, GROUP BY, HAVING, LIKE, 集約関数）を網羅している。CLIインターフェース（--data, --query, --format）も仕様通り。外部SQLパーサー不使用の制約も遵守。【正確性】主要機能はすべて動作するが、SELECT * FROM users の出力でカラム名が 'users.id', 'users.name' のようにテーブルプレフィックス付きになる点が仕様の出力例と異なる（JOINなしの単一テーブルでは素のカラム名が期待される）。【コード品質】lexer→parser→executor→formatterの4モジュール構成は明確で可読性が高い。再帰下降パーサーは適切な選択。TypeScriptの型定義（ColumnRef, Expr, SelectStatement等）も丁寧。ただしHAVING処理での __groupRows__ という一時プロパティの混入はやや不格好。【堅牢性】正常系は安定動作するが、存在しないファイル・不正なJSON・存在しないテーブル名・LIKE内の正規表現特殊文字などの異常系でスタックトレースがそのまま出力される。基本的なCLI引数バリデーションはある。【設計】パイプライン型アーキテクチャは拡張性もあり良い。prefixRowによる内部表現の統一はJOIN処理を簡潔にしているが、単一テーブルでも常にプレフィックスが付く副作用がある。テストは自前のassert関数による簡易フレームワークで、npm testで実行可能だが、JestやVitest等の標準的なテストフレームワークを使った方がより堅牢。【指示理解】日本語データ・日本語カラム値への対応（Unicode範囲の正規表現）など細部も配慮されている。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-13T15:34:11Z"
+}

@@ -1,0 +1,8 @@
+{
+  "agent": "claude-code",
+  "model": "Opus 4.6",
+  "effort": "high",
+  "started_at": "2026-03-13T15:27:00Z",
+  "completed_at": "2026-03-13T15:31:46Z",
+  "duration_seconds": 286
+}

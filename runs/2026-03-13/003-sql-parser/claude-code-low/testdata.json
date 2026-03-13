@@ -1,0 +1,12 @@
+{
+  "users": [
+    {"id": 1, "name": "田中太郎", "age": 30, "department_id": 1},
+    {"id": 2, "name": "佐藤花子", "age": 25, "department_id": 2},
+    {"id": 3, "name": "鈴木一郎", "age": 35, "department_id": 1}
+  ],
+  "departments": [
+    {"id": 1, "name": "開発部"},
+    {"id": 2, "name": "営業部"},
+    {"id": 3, "name": "人事部"}
+  ]
+}
