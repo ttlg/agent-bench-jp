@@ -1,0 +1,21 @@
+{
+  "name": "lc-cli",
+  "version": "1.0.0",
+  "description": "Count lines in files within a directory",
+  "main": "dist/index.js",
+  "bin": {
+    "lc": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lc": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
+  }
+}

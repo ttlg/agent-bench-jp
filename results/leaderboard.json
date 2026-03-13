@@ -1,6 +1,6 @@
 {
-  "updated": "2026-03-10",
-  "tasks_evaluated": 4,
+  "updated": "2026-03-13",
+  "tasks_evaluated": 5,
   "overall": [
     {
       "rank": 1,
@@ -17,6 +17,19 @@
     },
     {
       "rank": 2,
+      "agent": "claude-code-high",
+      "model": "Opus 4.6",
+      "effort": "high",
+      "tasks": 1,
+      "correctness": 5,
+      "code_quality": 4,
+      "robustness": 4,
+      "design": 4,
+      "comprehension": 5,
+      "total": 22
+    },
+    {
+      "rank": 3,
       "agent": "claude-code",
       "model": "Opus 4.6",
       "effort": "max",
@@ -27,6 +40,19 @@
       "design": 4,
       "comprehension": 4.5,
       "total": 21
+    },
+    {
+      "rank": 4,
+      "agent": "claude-code-medium",
+      "model": "Opus 4.6",
+      "effort": "medium",
+      "tasks": 1,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3,
+      "design": 4,
+      "comprehension": 4,
+      "total": 19
     }
   ],
   "tasks": [
@@ -210,6 +236,52 @@
             "started_at": "2026-03-10T06:53:00+00:00",
             "completed_at": "2026-03-10T07:04:12+00:00",
             "duration_seconds": 672
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-13/001-cli-tool",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "claude-code-high",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-13T14:53:58Z",
+            "completed_at": "2026-03-13T14:55:21Z",
+            "duration_seconds": 83
+          }
+        },
+        {
+          "agent": "claude-code-medium",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "claude-code",
+            "model": "Opus 4.6",
+            "effort": "medium",
+            "started_at": "2026-03-13T14:54:06Z",
+            "completed_at": "2026-03-13T14:55:40Z",
+            "duration_seconds": 94
           }
         }
       ]
