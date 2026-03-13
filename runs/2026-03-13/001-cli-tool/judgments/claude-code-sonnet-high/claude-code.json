@@ -1,0 +1,11 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "【正確性 4/5】全主要要求（--ext, --sort, --total、隠しファイル/node_modules除外、bin設定）を満たしている。ただしcountLines関数で末尾改行のあるファイル（一般的なテキストファイル）に対しsplit('\\n').lengthが実際の行数より1多くカウントするoff-by-oneバグがある（例: 'a\\nb\\n' → 3を返すが正しくは2行）。【コード品質 4/5】TypeScriptの型定義（Options, FileResult インターフェース）が適切で、関数分割（parseArgs, collectFiles, countLines, formatResults, main）も明確。命名規則も一貫しており可読性が高い。shebang行も正しく設置。外部依存なしで標準ライブラリのみ使用している点も良い。【堅牢性 3/5】ディレクトリ存在チェック、--ext値欠如チェック、空結果時のメッセージ表示、空ファイル対応など正常系・基本異常系はカバー。しかしreadFileSyncやreaddirSyncにtry-catchがなく、パーミッションエラーやバイナリファイル読み込み時にクラッシュする。シンボリックリンクの循環参照対策もない。【設計 4/5】CLIツールとして適切な規模感の設計。外部ライブラリ不使用は妥当な判断（commander等は過剰）。同期I/Oもこの用途では許容範囲。formatResultsでのカラム幅自動調整は丁寧。ただし「合計」の表示幅が全角文字のためpadEndでは端末上でずれる可能性がある。【指示理解 4/5】コマンド名lc、引数、3つのオプション、出力フォーマット（合計・罫線）、除外対象、npx実行対応など明示された要求を正確に理解し実装。拡張子のドット有無の補正（ext.startsWith('.') ? ext : '.' + ext）は暗黙の配慮として評価できる。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-14T01:36:36Z"
+}

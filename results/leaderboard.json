@@ -43,6 +43,19 @@
     },
     {
       "rank": 4,
+      "agent": "claude-code-sonnet-high",
+      "model": "Sonnet 4.6",
+      "effort": "high",
+      "tasks": 2,
+      "correctness": 4.5,
+      "code_quality": 4,
+      "robustness": 3.5,
+      "design": 4,
+      "comprehension": 4.5,
+      "total": 20.5
+    },
+    {
+      "rank": 5,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
@@ -55,7 +68,7 @@
       "total": 20
     },
     {
-      "rank": 5,
+      "rank": 6,
       "agent": "claude-code-low",
       "model": "Opus 4.6",
       "effort": "low",
@@ -315,6 +328,25 @@
             "completed_at": "2026-03-13T14:55:40Z",
             "duration_seconds": 94
           }
+        },
+        {
+          "agent": "claude-code-sonnet-high",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "claude-code-sonnet-high",
+            "model": "Sonnet 4.6",
+            "effort": "high",
+            "started_at": "2026-03-14T01:29:33Z",
+            "completed_at": "2026-03-14T01:30:55Z",
+            "duration_seconds": 82
+          }
         }
       ]
     },
@@ -379,6 +411,25 @@
             "started_at": "2026-03-13T15:18:02Z",
             "completed_at": "2026-03-13T15:19:26Z",
             "duration_seconds": 84
+          }
+        },
+        {
+          "agent": "claude-code-sonnet-high",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code-sonnet-high",
+            "model": "Sonnet 4.6",
+            "effort": "high",
+            "started_at": "2026-03-14T01:29:34Z",
+            "completed_at": "2026-03-14T01:34:06Z",
+            "duration_seconds": 272
           }
         }
       ]
