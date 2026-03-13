@@ -1,5 +1,7 @@
 # Agent Bench JP
 
+https://ttlg.github.io/agent-bench-jp/
+
 日本語コーディングエージェントベンチマーク。
 
 日本語の指示に対するコーディングエージェント（Claude Code, Codex, etc.）の性能を比較評価する。
