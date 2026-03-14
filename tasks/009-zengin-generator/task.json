@@ -1,0 +1,7 @@
+{
+  "id": "009",
+  "name": "簡易全銀フォーマット振込データ生成CLI",
+  "category": "generation",
+  "difficulty": "very-hard",
+  "language": "python"
+}

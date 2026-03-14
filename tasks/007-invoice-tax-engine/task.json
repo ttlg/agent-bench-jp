@@ -1,0 +1,7 @@
+{
+  "id": "007",
+  "name": "適格請求書 消費税計算エンジン",
+  "category": "generation",
+  "difficulty": "hard",
+  "language": "typescript"
+}
