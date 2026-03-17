@@ -62,9 +62,12 @@ section h2::before{content:'';display:inline-block;width:4px;height:20px;
 .agent-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .agent-detail-name{font-weight:600;font-size:.95rem}
 .agent-detail-total{font-weight:700;color:var(--accent);font-size:1.05rem}
+.agent-detail-duration{font-size:.85rem;color:var(--text-muted);font-weight:500;
+  background:var(--bar-bg);padding:2px 10px;border-radius:4px;white-space:nowrap}
 .meta-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .meta-tag{font-size:.75rem;background:var(--bar-bg);color:var(--text-muted);
   padding:2px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+.duration-cell{font-size:.85rem;color:var(--text-muted);white-space:nowrap}
 .score-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:.82rem}
 .score-label{width:90px;color:var(--text-muted);text-align:right;flex-shrink:0}
 .score-fill{height:8px;border-radius:4px;transition:width .4s ease}
@@ -209,14 +212,24 @@ function render(data){
     <div style="overflow-x:auto"><table class="lb-table">
     <thead><tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
   DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
-  html+=`<th>合計</th></tr></thead><tbody>`;
+  html+=`<th>合計</th><th>平均時間</th></tr></thead><tbody>`;
+  // Compute avg duration per agent from task data
+  const agentDurations={};
+  data.tasks.forEach(t=>{t.agents.forEach(a=>{
+    if(!a.meta?.duration_seconds)return;
+    if(!agentDurations[a.agent])agentDurations[a.agent]=[];
+    agentDurations[a.agent].push(a.meta.duration_seconds);
+  })});
   data.overall.forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
     const label=agentLabel(r.agent,r.model,r.effort);
     const family=agentFamily(r.agent);
+    const durations=agentDurations[r.agent]||[];
+    const avgDur=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length):null;
     html+=`<tr data-family="${family}"><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td><td>${r.tasks}</td>`;
     DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,agentColor(r.agent))}</td>`});
-    html+=`<td class="total-cell">${r.total}</td></tr>`;
+    html+=`<td class="total-cell">${r.total}</td>`;
+    html+=`<td class="duration-cell">${avgDur?formatDuration(avgDur):'—'}</td></tr>`;
   });
   html+=`</tbody></table></div></section>`;
 
@@ -253,17 +266,16 @@ function render(data){
       const aLabel=agentLabel(a.agent,a.meta?.model,a.meta?.effort);
       html+=`<div class="agent-detail" data-family="${agentFamily(a.agent)}">
         <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${aLabel}</span>
-        <span class="agent-detail-total">${a.scores.total}点</span></div>`;
+        <div style="display:flex;align-items:center;gap:10px">
+          ${a.meta?`<span class="agent-detail-duration">⏱ ${formatDuration(a.meta.duration_seconds)}</span>`:''}
+          <span class="agent-detail-total">${a.scores.total}点</span>
+        </div></div>`;
       DIMENSIONS.forEach(d=>{
         const pct=(a.scores[d]/5*100).toFixed(1);
         html+=`<div class="score-row"><span class="score-label">${DIM_JA[d]}</span>
           <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${ac}"></div></div>
           <span class="score-num">${a.scores[d]}</span></div>`;
       });
-      if(a.meta){
-        html+=`<div class="meta-tags">
-          <span class="meta-tag">⏱ ${formatDuration(a.meta.duration_seconds)}</span></div>`;
-      }
       html+=`</div>`;
     });
     html+=`</div></div></div>`;
