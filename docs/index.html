@@ -134,7 +134,9 @@ function renderScoreBar(val,max=5,color='var(--accent)'){
 function agentFamily(name){return name.startsWith('claude-code')?'claude-code':'codex'}
 
 let _data=null;
+let _mergedTasks=null;
 let _currentFilter='all';
+let _taskCharts=[];
 
 function applyFilter(filter){
   _currentFilter=filter;
@@ -144,8 +146,14 @@ function applyFilter(filter){
     if(filter==='all'){tr.style.display='';return}
     tr.style.display=tr.dataset.family===filter?'':'none';
   });
-  // Rebuild radar chart
+  // Filter task detail agent cards
+  document.querySelectorAll('.agent-detail[data-family]').forEach(el=>{
+    if(filter==='all'){el.style.display='';return}
+    el.style.display=el.dataset.family===filter?'':'none';
+  });
+  // Rebuild radar charts
   if(_data)drawOverallRadar(_data,filter);
+  if(_mergedTasks)drawTaskRadars(_mergedTasks,filter);
 }
 
 function drawOverallRadar(data,filter){
@@ -162,6 +170,27 @@ function drawOverallRadar(data,filter){
       borderWidth:2,pointRadius:3,pointBackgroundColor:c
     }})
   },options:radarOpts()});
+}
+
+function drawTaskRadars(tasks,filter){
+  _taskCharts.forEach(c=>c.destroy());
+  _taskCharts=[];
+  tasks.forEach((t,ti)=>{
+    const ctx=document.getElementById(`radar-${ti}`);
+    if(!ctx)return;
+    const agents=filter==='all'?t.agents:t.agents.filter(a=>agentFamily(a.agent)===filter);
+    const sorted=[...agents].sort((a,b)=>b.scores.total-a.scores.total);
+    const chart=new Chart(ctx,{type:'radar',data:{
+      labels:DIMENSIONS.map(d=>DIM_JA[d]),
+      datasets:sorted.map(a=>{const c=agentColor(a.agent);return{
+        label:agentLabel(a.agent,a.meta?.model,a.meta?.effort),
+        data:DIMENSIONS.map(d=>a.scores[d]),
+        borderColor:c,backgroundColor:c+'22',
+        borderWidth:2,pointRadius:3,pointBackgroundColor:c
+      }})
+    },options:radarOpts()});
+    _taskCharts.push(chart);
+  });
 }
 
 function render(data){
@@ -210,6 +239,7 @@ function render(data){
     });
   });
   const mergedTasks=[...tasksByName.values()];
+  _mergedTasks=mergedTasks;
 
   html+=`<section><h2>タスク別詳細</h2>`;
   mergedTasks.forEach((t,ti)=>{
@@ -221,7 +251,7 @@ function render(data){
     [...t.agents].sort((a,b)=>b.scores.total-a.scores.total).forEach(a=>{
       const ac=agentColor(a.agent);
       const aLabel=agentLabel(a.agent,a.meta?.model,a.meta?.effort);
-      html+=`<div class="agent-detail">
+      html+=`<div class="agent-detail" data-family="${agentFamily(a.agent)}">
         <div class="agent-detail-header"><span class="agent-detail-name" style="color:${ac}">${aLabel}</span>
         <span class="agent-detail-total">${a.scores.total}点</span></div>`;
       DIMENSIONS.forEach(d=>{
@@ -246,19 +276,7 @@ function render(data){
   drawOverallRadar(data,'all');
 
   // Draw per-task radars
-  mergedTasks.forEach((t,ti)=>{
-    const ctx=document.getElementById(`radar-${ti}`);
-    if(!ctx)return;
-    new Chart(ctx,{type:'radar',data:{
-      labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:[...t.agents].sort((a,b)=>b.scores.total-a.scores.total).map(a=>{const c=agentColor(a.agent);return{
-        label:agentLabel(a.agent,a.meta?.model,a.meta?.effort),
-        data:DIMENSIONS.map(d=>a.scores[d]),
-        borderColor:c,backgroundColor:c+'22',
-        borderWidth:2,pointRadius:3,pointBackgroundColor:c
-      }})
-    },options:radarOpts()});
-  });
+  drawTaskRadars(mergedTasks,'all');
 }
 
 function radarOpts(){
