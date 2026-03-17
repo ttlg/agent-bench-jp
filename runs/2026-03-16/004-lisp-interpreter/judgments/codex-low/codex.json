@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 3,
+  "total": 17,
+  "reasoning": "提出テストは 10/10 通過し、基本的な評価器・REPL・ファイル実行・クロージャ・TCO は実装できています。一方で要件のマクロ例そのものは通りません。define-macroのwhen展開先で3引数のifを前提にしていますが、この実装のifは4要素固定でValueErrorで失敗します。また'()がnilに正規化されずPythonの空リスト[]として扱われるため意味論が一貫していません。コード自体は整理されており読みやすいですが、異常系では生のValueErrorが漏れる箇所があります。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T05:15:00Z",
+  "duration_seconds": 200
+}
