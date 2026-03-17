@@ -124,7 +124,8 @@ function agentLabel(agent,model,effort){
   if(!model)return agent;
   let base=agent;
   if(effort&&base.endsWith('-'+effort))base=base.slice(0,-(effort.length+1));
-  return `${base}-${model.toLowerCase().replace(/\s+/g,'-')}-${effort||''}`.replace(/-$/,'');
+  const e=(effort&&effort!=='default')?effort:'';
+  return `${base}-${model.toLowerCase().replace(/\s+/g,'-')}${e?'-'+e:''}`.replace(/-$/,'');
 }
 
 function renderScoreBar(val,max=5,color='var(--accent)'){
