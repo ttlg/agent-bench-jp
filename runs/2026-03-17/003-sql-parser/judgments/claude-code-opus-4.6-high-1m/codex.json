@@ -1,0 +1,11 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "主要要件は概ね満たしています。実装は tokenizer/parser/executor/formatter/cli に分割されており、CLI も動作し、npm run build と同梱テスト 40 件は通過しました。SELECT、WHERE、JOIN、集約、GROUP BY、HAVING、ORDER BY、LIMIT/OFFSET、table/json 出力、キーワードの大文字小文字非依存は確認できました。ただし完全性と堅牢性には不足があります。src/parser.ts 110-141 では SELECT 項目の AS 別名を解釈できず、実際に SELECT name AS n FROM users は失敗しました。src/parser.ts 347-358 により ORDER BY は列参照しか受け付けないため、GROUP BY 後の ORDER BY COUNT(*) DESC も失敗しました。src/executor.ts 215-224 の LIKE 実装は % のみで _ ワイルドカードを扱わず、LIKE の SQL 互換性が不完全です。src/executor.ts 108-116 では LEFT JOIN 先テーブルが空配列のとき右側列の NULL 補完が行われず、SELECT a.id, b.id ... LEFT JOIN b で b.id 自体が欠落しました。さらに src/executor.ts 123-145 は結合時の曖昧な非修飾列をエラーにせず最初に見つかった列へ解決するため、誤結果を静かに返す可能性があります。したがって、主要要求は満たすが SQL エッジケースと異常系の完成度は一段落ちる評価です。",
+  "judge": "codex (GPT-5.4 reasoning high)",
+  "judged_at": "2026-03-17T13:05:30Z"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "description": "SQL parser and execution engine for JSON data",
+  "main": "dist/cli.js",
+  "bin": {
+    "jsql": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/cli.ts",
+    "jsql": "ts-node src/cli.ts",
+    "test": "ts-node src/test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

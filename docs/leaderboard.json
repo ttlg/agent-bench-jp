@@ -56,6 +56,19 @@
     },
     {
       "rank": 5,
+      "agent": "claude-code-opus-4.6-high-1m",
+      "model": "Opus 4.6",
+      "effort": "high",
+      "tasks": 4,
+      "correctness": 3.75,
+      "code_quality": 4,
+      "robustness": 3.5,
+      "design": 4,
+      "comprehension": 4.25,
+      "total": 19.5
+    },
+    {
+      "rank": 6,
       "agent": "claude-code-sonnet-high",
       "model": "Sonnet 4.6",
       "effort": "high",
@@ -68,7 +81,7 @@
       "total": 19
     },
     {
-      "rank": 6,
+      "rank": 7,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
@@ -81,7 +94,7 @@
       "total": 18.75
     },
     {
-      "rank": 7,
+      "rank": 8,
       "agent": "codex-medium",
       "model": "GPT-5.4",
       "effort": "medium",
@@ -94,7 +107,7 @@
       "total": 18
     },
     {
-      "rank": 8,
+      "rank": 9,
       "agent": "codex-low",
       "model": "GPT-5.4",
       "effort": "low",
@@ -107,7 +120,7 @@
       "total": 17.75
     },
     {
-      "rank": 9,
+      "rank": 10,
       "agent": "claude-code-low",
       "model": "Opus 4.6",
       "effort": "low",
@@ -120,7 +133,7 @@
       "total": 16.75
     },
     {
-      "rank": 10,
+      "rank": 11,
       "agent": "gemini",
       "model": "Gemini 3.1 Preview",
       "effort": "default",
@@ -921,6 +934,25 @@
       ],
       "agents": [
         {
+          "agent": "claude-code-opus-4.6-high-1m",
+          "scores": {
+            "correctness": 2,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 17
+          },
+          "meta": {
+            "agent": "claude-code-opus-4.6-high-1m",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-17T12:40:33Z",
+            "completed_at": "2026-03-17T12:42:08Z",
+            "duration_seconds": 95
+          }
+        },
+        {
           "agent": "gemini",
           "scores": {
             "correctness": 3,
@@ -947,6 +979,25 @@
         "codex"
       ],
       "agents": [
+        {
+          "agent": "claude-code-opus-4.6-high-1m",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "claude-code-opus-4.6-high-1m",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-17T12:40:41Z",
+            "completed_at": "2026-03-17T12:41:16Z",
+            "duration_seconds": 35
+          }
+        },
         {
           "agent": "gemini",
           "scores": {
@@ -975,6 +1026,25 @@
       ],
       "agents": [
         {
+          "agent": "claude-code-opus-4.6-high-1m",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "claude-code-opus-4.6-high-1m",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-17T12:49:50Z",
+            "completed_at": "2026-03-17T13:02:15Z",
+            "duration_seconds": 745
+          }
+        },
+        {
           "agent": "gemini",
           "scores": {
             "correctness": 3,
@@ -1001,6 +1071,25 @@
         "codex"
       ],
       "agents": [
+        {
+          "agent": "claude-code-opus-4.6-high-1m",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4,
+            "total": 20
+          },
+          "meta": {
+            "agent": "claude-code-opus-4.6-high-1m",
+            "model": "Opus 4.6",
+            "effort": "high",
+            "started_at": "2026-03-17T12:49:51Z",
+            "completed_at": "2026-03-17T13:05:11Z",
+            "duration_seconds": 920
+          }
+        },
         {
           "agent": "gemini",
           "scores": {
