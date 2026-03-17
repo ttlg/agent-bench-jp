@@ -209,25 +209,37 @@ function render(data){
       <button class="filter-btn" data-filter="codex" onclick="applyFilter('codex')">Codex</button>
       <button class="filter-btn" data-filter="claude-code" onclick="applyFilter('claude-code')">Claude Code</button>
     </div>
-    <div style="overflow-x:auto"><table class="lb-table">
-    <thead><tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
-  DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
-  html+=`<th>合計</th><th>平均時間</th></tr></thead><tbody>`;
-  // Compute avg duration per agent from task data
+    <div style="overflow-x:auto"><table class="lb-table">`;
+  // Build per-agent per-task score map and unique task names
+  const taskNames=[...new Set(data.tasks.map(t=>extractTaskName(t.taskId)))].sort();
+  const agentTaskScores={};
   const agentDurations={};
-  data.tasks.forEach(t=>{t.agents.forEach(a=>{
-    if(!a.meta?.duration_seconds)return;
-    if(!agentDurations[a.agent])agentDurations[a.agent]=[];
-    agentDurations[a.agent].push(a.meta.duration_seconds);
-  })});
+  data.tasks.forEach(t=>{
+    const tname=extractTaskName(t.taskId);
+    t.agents.forEach(a=>{
+      if(!agentTaskScores[a.agent])agentTaskScores[a.agent]={};
+      agentTaskScores[a.agent][tname]=a.scores.total;
+      if(a.meta?.duration_seconds){
+        if(!agentDurations[a.agent])agentDurations[a.agent]=[];
+        agentDurations[a.agent].push(a.meta.duration_seconds);
+      }
+    });
+  });
+  html+=`<thead><tr><th>順位</th><th>エージェント</th>`;
+  taskNames.forEach(tn=>{html+=`<th>${tn}</th>`});
+  html+=`<th>平均</th><th>平均時間</th></tr></thead><tbody>`;
   data.overall.forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
     const label=agentLabel(r.agent,r.model,r.effort);
     const family=agentFamily(r.agent);
     const durations=agentDurations[r.agent]||[];
     const avgDur=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length):null;
-    html+=`<tr data-family="${family}"><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td><td>${r.tasks}</td>`;
-    DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,agentColor(r.agent))}</td>`});
+    const scores=agentTaskScores[r.agent]||{};
+    html+=`<tr data-family="${family}"><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td>`;
+    taskNames.forEach(tn=>{
+      const s=scores[tn];
+      html+=`<td>${s!=null?renderScoreBar(s,25,agentColor(r.agent)):'—'}</td>`;
+    });
     html+=`<td class="total-cell">${r.total}</td>`;
     html+=`<td class="duration-cell">${avgDur?formatDuration(avgDur):'—'}</td></tr>`;
   });
