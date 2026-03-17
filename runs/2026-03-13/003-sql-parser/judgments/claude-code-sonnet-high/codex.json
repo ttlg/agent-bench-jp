@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 2,
+  "design": 3,
+  "comprehension": 4,
+  "total": 16,
+  "reasoning": "主要機能は一通り実装されており、lexer/parser/executor/formatter/test に分割された構成も明快で、npm test は 25 件すべて通過しました。一方で列解決が table.column を正しく保持しきれておらず、JOIN 後の SUM(d.id) と SUM(u.id) がどちらも同じ SUM(id) として扱われます。LEFT JOIN の右表が空の場合に左表の id を拾ってしまうなど、未一致時の意味論にも破綻があります。セミコロン終端の SQL を受け付けない、曖昧な列参照を静かに解決してしまうなど異常系への強さは不十分です。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T04:16:00Z",
+  "duration_seconds": 200
+}

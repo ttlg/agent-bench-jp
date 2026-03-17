@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 5,
+  "total": 20,
+  "reasoning": "要件の主要機能は一通り実装されており、npm test は 29/29 件成功、npm run build も通過しました。トークナイザ・パーサー・実行エンジン・フォーマッタ・CLI に分離されていて、構造は素直で読みやすく、指示理解も良好です。一方で、パーサーが EOF を検証していないため不正な末尾トークンを黙って受理します。CLI もファイル読込失敗や不正 SQL を捕捉せず Node のスタックトレースをそのまま出します。集約関数 MIN / MAX は値を Number 化しており、文字列列に対して NaN になります。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:42:00Z",
+  "duration_seconds": 240
+}

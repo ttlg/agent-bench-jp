@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 5,
+  "total": 22,
+  "reasoning": "自前実装のトークナイザ・パーサー・実行エンジン・CLI・フォーマッタ・テストが分離されており、要件で求められた主要機能は概ね揃っています。npm test は12件すべて通過し、ビルドも成功しました。SELECT/WHERE/LIKE/ORDER BY/LIMIT/OFFSET/INNER JOIN/LEFT JOIN/GROUP BY/HAVING/集約関数、キーワードの大文字小文字非依存、--format json は実装確認できました。一方で、JSON入力の妥当性検証は浅く、異常系テストが不足しており、tsx に依存して TypeScript をそのまま起動する構成です。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T04:20:00Z",
+  "duration_seconds": 220
+}

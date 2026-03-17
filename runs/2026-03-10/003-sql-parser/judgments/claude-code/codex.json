@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 2,
+  "design": 3,
+  "comprehension": 5,
+  "total": 18,
+  "reasoning": "主要要件は広く実装されており、字句解析・パース・実行・整形が分離され、テスト49件も全件通過、ビルドも成功しました。SELECT/WHERE/JOIN/ORDER BY/LIMIT/GROUP BY/HAVING/LIKE/集約/--format json は一通り揃っています。一方で LEFT JOIN の境界ケースで d.name が null ではなく左表の name を誤って返す不具合があります。パーサーが EOF を検証しないため余分なトークンを弾けず、CLI 側のエラーハンドリングも薄いです。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:38:00Z",
+  "duration_seconds": 240
+}

@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 3,
+  "comprehension": 3,
+  "total": 16,
+  "reasoning": "実装は tokenizer / parser / engine / formatter / CLI に分かれており、npm test も通過していて主要機能は概ね動作しています。一方で LEFT OUTER JOIN はパーサーが受理せず失敗します。SELECT u.name, d.name は両方の列名が name になり片方が上書きされます。テーブル出力も要件例の形式ではなく、テストデータも依頼文のサンプルではありません。コード自体は読みやすいですが、Record<string, unknown> で表現した設計のため重複列名に弱いです。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T04:08:00Z",
+  "duration_seconds": 200
+}

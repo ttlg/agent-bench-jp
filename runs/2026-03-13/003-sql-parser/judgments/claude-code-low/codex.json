@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 3,
+  "robustness": 2,
+  "design": 3,
+  "comprehension": 4,
+  "total": 15,
+  "reasoning": "主要機能は概ね実装されており、npm test は 25 passed、npm run build も成功しました。lexer / parser / executor / formatter に責務分割されています。一方で、SELECT * FROM users ORDER BY age DESC が正しく並ばず、SELECT * の結果も users.age のようなプレフィックス付き列名で出力されます。CLI は例外を握らず、壊れたSQLでスタックトレースをそのまま出し、パーサーも末尾の不要トークンを検出しません。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T04:03:00Z",
+  "duration_seconds": 200
+}

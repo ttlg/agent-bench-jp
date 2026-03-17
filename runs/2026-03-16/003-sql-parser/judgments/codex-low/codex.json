@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 3,
+  "robustness": 2,
+  "design": 3,
+  "comprehension": 2,
+  "total": 13,
+  "reasoning": "主要機能は一通り実装されており、npm test も通過します。トークナイザ、パーサ、実行エンジン、CLI が分離されていて基本系は動きます。一方で LEFT OUTER JOIN をパースできず、SELECT u.name, d.name のような必須例では両方の列名が name になって後勝ちで上書きされます。ORDER BY は射影後の行に対して実行されるため、選択していない列での並び替えが正しく機能しません。表形式出力も要件例の | ... | 形式ではありません。テストデータも依頼文の日本語サンプルではなく簡略化された英語データです。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:30:00Z",
+  "duration_seconds": 200
+}
