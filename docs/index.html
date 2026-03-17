@@ -122,10 +122,12 @@ function extractTaskName(id){return id.split('/').pop()||id}
 
 function agentLabel(agent,model,effort){
   if(!model)return agent;
+  const modelSlug=model.toLowerCase().replace(/\s+/g,'-');
+  if(agent.includes(modelSlug))return agent;
   let base=agent;
   if(effort&&base.endsWith('-'+effort))base=base.slice(0,-(effort.length+1));
   const e=(effort&&effort!=='default')?effort:'';
-  return `${base}-${model.toLowerCase().replace(/\s+/g,'-')}${e?'-'+e:''}`.replace(/-$/,'');
+  return `${base}-${modelSlug}${e?'-'+e:''}`.replace(/-$/,'');
 }
 
 function renderScoreBar(val,max=5,color='var(--accent)'){
