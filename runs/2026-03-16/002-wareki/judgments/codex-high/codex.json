@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 5,
+  "design": 4,
+  "comprehension": 5,
+  "total": 23,
+  "reasoning": "主要要件は概ね完全に満たしています。to-wareki / to-seireki の両方が実装され、明治・大正・昭和・平成・令和に対応し、境界日も正しく処理できています。npm test は全件通過し、2026-03-10 -> 令和8年3月10日（火）、1989-01-07/08 の境界ケースも正しく動作しました。不正日付や元号範囲外入力でも適切にエラーになります。コードも小さく整理されており、元号定義を配列化し、パース・検証・変換を分離していて読みやすいです。一方で、bin が生の .ts を直接指しているため、実行環境の Node のTypeScript実行能力に依存します。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:12:00Z",
+  "duration_seconds": 180
+}

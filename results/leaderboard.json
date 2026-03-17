@@ -1,141 +1,141 @@
 {
   "updated": "2026-03-17",
-  "tasks_evaluated": 12,
+  "tasks_evaluated": 6,
   "overall": [
     {
       "rank": 1,
       "agent": "codex",
       "model": "GPT-5.4",
       "effort": "xhigh",
-      "tasks": 4,
-      "correctness": 4.75,
-      "code_quality": 5,
+      "tasks": 2,
+      "correctness": 5,
+      "code_quality": 4.5,
       "robustness": 4,
-      "design": 4.5,
+      "design": 4,
       "comprehension": 5,
-      "total": 23.25
+      "total": 22.5
     },
     {
       "rank": 2,
-      "agent": "claude-code-high",
-      "model": "Opus 4.6",
-      "effort": "high",
-      "tasks": 4,
-      "correctness": 4.75,
-      "code_quality": 4.25,
-      "robustness": 3.75,
+      "agent": "codex-low",
+      "model": "GPT-5.4",
+      "effort": "low",
+      "tasks": 2,
+      "correctness": 4.5,
+      "code_quality": 4,
+      "robustness": 3.5,
       "design": 4,
-      "comprehension": 4.75,
-      "total": 21.5
+      "comprehension": 4.5,
+      "total": 20.5
     },
     {
       "rank": 3,
-      "agent": "claude-code",
-      "model": "Opus 4.6",
-      "effort": "max",
-      "tasks": 4,
-      "correctness": 4.5,
-      "code_quality": 4.25,
-      "robustness": 3.75,
+      "agent": "claude-code-sonnet-high",
+      "model": "Sonnet 4.6",
+      "effort": "high",
+      "tasks": 2,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.5,
       "design": 4,
       "comprehension": 4.5,
-      "total": 21
+      "total": 20
     },
     {
       "rank": 4,
       "agent": "codex-high",
       "model": "GPT-5.4",
       "effort": "high",
-      "tasks": 4,
-      "correctness": 4.25,
-      "code_quality": 4.5,
-      "robustness": 3.75,
-      "design": 4,
-      "comprehension": 4.5,
-      "total": 21
+      "tasks": 2,
+      "correctness": 4.5,
+      "code_quality": 4,
+      "robustness": 4,
+      "design": 3.5,
+      "comprehension": 4,
+      "total": 20
     },
     {
       "rank": 5,
-      "agent": "codex-low",
-      "model": "GPT-5.4",
-      "effort": "low",
-      "tasks": 4,
-      "correctness": 4.5,
-      "code_quality": 4.25,
-      "robustness": 3.75,
+      "agent": "claude-code",
+      "model": "Opus 4.6",
+      "effort": "max",
+      "tasks": 2,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.5,
       "design": 4,
-      "comprehension": 4.25,
-      "total": 20.75
+      "comprehension": 4,
+      "total": 19.5
     },
     {
       "rank": 6,
-      "agent": "claude-code-sonnet-high",
-      "model": "Sonnet 4.6",
+      "agent": "claude-code-high",
+      "model": "Opus 4.6",
       "effort": "high",
-      "tasks": 4,
-      "correctness": 4.25,
-      "code_quality": 3.75,
-      "robustness": 3.75,
+      "tasks": 2,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.5,
       "design": 4,
-      "comprehension": 4.5,
-      "total": 20.25
+      "comprehension": 4,
+      "total": 19.5
     },
     {
       "rank": 7,
       "agent": "codex-medium",
       "model": "GPT-5.4",
       "effort": "medium",
-      "tasks": 4,
-      "correctness": 4.25,
-      "code_quality": 4.25,
+      "tasks": 2,
+      "correctness": 3.5,
+      "code_quality": 4,
       "robustness": 3.5,
       "design": 4,
-      "comprehension": 4.25,
-      "total": 20.25
+      "comprehension": 4,
+      "total": 19
     },
     {
       "rank": 8,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
-      "tasks": 4,
-      "correctness": 4.25,
-      "code_quality": 4,
+      "tasks": 2,
+      "correctness": 3.5,
+      "code_quality": 3.5,
       "robustness": 3.5,
-      "design": 4,
-      "comprehension": 4.25,
-      "total": 20
+      "design": 3.5,
+      "comprehension": 3.5,
+      "total": 17.5
     },
     {
       "rank": 9,
       "agent": "claude-code-low",
       "model": "Opus 4.6",
       "effort": "low",
-      "tasks": 4,
-      "correctness": 4,
-      "code_quality": 3.75,
-      "robustness": 3.75,
-      "design": 3.75,
-      "comprehension": 4.25,
-      "total": 19.5
+      "tasks": 2,
+      "correctness": 3.5,
+      "code_quality": 3.5,
+      "robustness": 3,
+      "design": 3.5,
+      "comprehension": 3.5,
+      "total": 17
     }
   ],
   "tasks": [
     {
       "taskId": "2026-03-10/001-cli-tool",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
           "agent": "codex",
           "scores": {
             "correctness": 5,
-            "code_quality": 5,
-            "robustness": 4,
+            "code_quality": 4,
+            "robustness": 3,
             "design": 4,
             "comprehension": 5,
-            "total": 23
+            "total": 21
           },
           "meta": {
             "agent": "codex",
@@ -149,12 +149,12 @@
         {
           "agent": "claude-code",
           "scores": {
-            "correctness": 5,
-            "code_quality": 5,
-            "robustness": 4,
+            "correctness": 3,
+            "code_quality": 4,
+            "robustness": 3,
             "design": 4,
-            "comprehension": 5,
-            "total": 23
+            "comprehension": 4,
+            "total": 18
           },
           "meta": {
             "agent": "claude-code",
@@ -170,7 +170,7 @@
     {
       "taskId": "2026-03-10/002-wareki",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
@@ -178,10 +178,10 @@
           "scores": {
             "correctness": 5,
             "code_quality": 5,
-            "robustness": 4,
+            "robustness": 5,
             "design": 4,
             "comprehension": 5,
-            "total": 23
+            "total": 24
           },
           "meta": {
             "agent": "codex",
@@ -195,12 +195,12 @@
         {
           "agent": "claude-code",
           "scores": {
-            "correctness": 4,
+            "correctness": 5,
             "code_quality": 4,
             "robustness": 4,
             "design": 4,
             "comprehension": 4,
-            "total": 20
+            "total": 21
           },
           "meta": {
             "agent": "claude-code",
@@ -214,32 +214,13 @@
       ]
     },
     {
-      "taskId": "2026-03-10/003-sql-parser",
+      "taskId": "2026-03-13/001-cli-tool",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
-          "agent": "codex",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 5,
-            "robustness": 4,
-            "design": 5,
-            "comprehension": 5,
-            "total": 23
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "xhigh",
-            "started_at": "2026-03-10T05:54:15+00:00",
-            "completed_at": "2026-03-10T06:04:38+00:00",
-            "duration_seconds": 623
-          }
-        },
-        {
-          "agent": "claude-code",
+          "agent": "claude-code-high",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
@@ -247,79 +228,6 @@
             "design": 4,
             "comprehension": 4,
             "total": 19
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "max",
-            "started_at": "2026-03-10T06:14:19+00:00",
-            "completed_at": "2026-03-10T06:25:14+00:00",
-            "duration_seconds": 655
-          }
-        }
-      ]
-    },
-    {
-      "taskId": "2026-03-10/004-lisp-interpreter",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "codex",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 5,
-            "robustness": 4,
-            "design": 5,
-            "comprehension": 5,
-            "total": 24
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "xhigh",
-            "started_at": "2026-03-10T06:52:05+00:00",
-            "completed_at": "2026-03-10T06:58:51+00:00",
-            "duration_seconds": 406
-          }
-        },
-        {
-          "agent": "claude-code",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 5,
-            "total": 22
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "max",
-            "started_at": "2026-03-10T06:53:00+00:00",
-            "completed_at": "2026-03-10T07:04:12+00:00",
-            "duration_seconds": 672
-          }
-        }
-      ]
-    },
-    {
-      "taskId": "2026-03-13/001-cli-tool",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "claude-code-high",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 5,
-            "total": 22
           },
           "meta": {
             "agent": "claude-code",
@@ -334,11 +242,11 @@
           "agent": "claude-code-low",
           "scores": {
             "correctness": 4,
-            "code_quality": 4,
+            "code_quality": 3,
             "robustness": 3,
-            "design": 4,
+            "design": 3,
             "comprehension": 4,
-            "total": 19
+            "total": 17
           },
           "meta": {
             "agent": "claude-code",
@@ -352,12 +260,12 @@
         {
           "agent": "claude-code-medium",
           "scores": {
-            "correctness": 4,
-            "code_quality": 4,
+            "correctness": 2,
+            "code_quality": 3,
             "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
+            "design": 3,
+            "comprehension": 2,
+            "total": 13
           },
           "meta": {
             "agent": "claude-code",
@@ -371,12 +279,12 @@
         {
           "agent": "claude-code-sonnet-high",
           "scores": {
-            "correctness": 4,
+            "correctness": 3,
             "code_quality": 4,
             "robustness": 3,
             "design": 4,
             "comprehension": 4,
-            "total": 19
+            "total": 18
           },
           "meta": {
             "agent": "claude-code-sonnet-high",
@@ -392,18 +300,18 @@
     {
       "taskId": "2026-03-13/002-wareki",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
           "agent": "claude-code-high",
           "scores": {
-            "correctness": 5,
-            "code_quality": 5,
+            "correctness": 4,
+            "code_quality": 4,
             "robustness": 4,
             "design": 4,
-            "comprehension": 5,
-            "total": 23
+            "comprehension": 4,
+            "total": 20
           },
           "meta": {
             "agent": "claude-code",
@@ -417,12 +325,12 @@
         {
           "agent": "claude-code-low",
           "scores": {
-            "correctness": 5,
+            "correctness": 3,
             "code_quality": 4,
-            "robustness": 5,
+            "robustness": 3,
             "design": 4,
-            "comprehension": 5,
-            "total": 23
+            "comprehension": 3,
+            "total": 17
           },
           "meta": {
             "agent": "claude-code",
@@ -436,12 +344,12 @@
         {
           "agent": "claude-code-medium",
           "scores": {
-            "correctness": 4,
+            "correctness": 5,
             "code_quality": 4,
             "robustness": 4,
             "design": 4,
-            "comprehension": 4,
-            "total": 20
+            "comprehension": 5,
+            "total": 22
           },
           "meta": {
             "agent": "claude-code",
@@ -474,177 +382,9 @@
       ]
     },
     {
-      "taskId": "2026-03-13/003-sql-parser",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "claude-code-high",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "high",
-            "started_at": "2026-03-13T15:27:00Z",
-            "completed_at": "2026-03-13T15:31:46Z",
-            "duration_seconds": 286
-          }
-        },
-        {
-          "agent": "claude-code-low",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "low",
-            "started_at": "2026-03-13T15:27:08Z",
-            "completed_at": "2026-03-13T15:30:07Z",
-            "duration_seconds": 179
-          }
-        },
-        {
-          "agent": "claude-code-medium",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "medium",
-            "started_at": "2026-03-13T15:27:04Z",
-            "completed_at": "2026-03-13T15:31:09Z",
-            "duration_seconds": 245
-          }
-        },
-        {
-          "agent": "claude-code-sonnet-high",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 4,
-            "total": 20
-          },
-          "meta": {
-            "agent": "claude-code-sonnet-high",
-            "model": "Sonnet 4.6",
-            "effort": "high",
-            "started_at": "2026-03-14T01:54:51Z",
-            "completed_at": "2026-03-14T02:05:25Z",
-            "duration_seconds": 634
-          }
-        }
-      ]
-    },
-    {
-      "taskId": "2026-03-13/004-lisp-interpreter",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "claude-code-high",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 5,
-            "total": 22
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "high",
-            "started_at": "2026-03-13T16:01:50Z",
-            "completed_at": "2026-03-13T16:14:02Z",
-            "duration_seconds": 732
-          }
-        },
-        {
-          "agent": "claude-code-low",
-          "scores": {
-            "correctness": 3,
-            "code_quality": 3,
-            "robustness": 4,
-            "design": 3,
-            "comprehension": 4,
-            "total": 17
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "low",
-            "started_at": "2026-03-13T16:02:02Z",
-            "completed_at": "2026-03-13T16:12:32Z",
-            "duration_seconds": 630
-          }
-        },
-        {
-          "agent": "claude-code-medium",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 5,
-            "total": 22
-          },
-          "meta": {
-            "agent": "claude-code",
-            "model": "Opus 4.6",
-            "effort": "medium",
-            "started_at": "2026-03-13T16:01:58Z",
-            "completed_at": "2026-03-13T16:04:47Z",
-            "duration_seconds": 169
-          }
-        },
-        {
-          "agent": "claude-code-sonnet-high",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 3,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 5,
-            "total": 20
-          },
-          "meta": {
-            "agent": "claude-code-sonnet-high",
-            "model": "Sonnet 4.6",
-            "effort": "high",
-            "started_at": "2026-03-14T02:13:38Z",
-            "completed_at": "2026-03-14T02:25:17Z",
-            "duration_seconds": 699
-          }
-        }
-      ]
-    },
-    {
       "taskId": "2026-03-16/001-cli-tool",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
@@ -652,10 +392,10 @@
           "scores": {
             "correctness": 4,
             "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 4,
-            "total": 20
+            "robustness": 3,
+            "design": 3,
+            "comprehension": 3,
+            "total": 17
           },
           "meta": {
             "agent": "codex",
@@ -669,12 +409,12 @@
         {
           "agent": "codex-low",
           "scores": {
-            "correctness": 5,
-            "code_quality": 5,
-            "robustness": 5,
-            "design": 5,
-            "comprehension": 5,
-            "total": 25
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
           },
           "meta": {
             "agent": "codex",
@@ -689,11 +429,11 @@
           "agent": "codex-medium",
           "scores": {
             "correctness": 4,
-            "code_quality": 5,
-            "robustness": 4,
+            "code_quality": 4,
+            "robustness": 3,
             "design": 4,
             "comprehension": 4,
-            "total": 21
+            "total": 19
           },
           "meta": {
             "agent": "codex",
@@ -709,15 +449,15 @@
     {
       "taskId": "2026-03-16/002-wareki",
       "judges": [
-        "claude-code"
+        "codex"
       ],
       "agents": [
         {
           "agent": "codex-high",
           "scores": {
             "correctness": 5,
-            "code_quality": 5,
-            "robustness": 4,
+            "code_quality": 4,
+            "robustness": 5,
             "design": 4,
             "comprehension": 5,
             "total": 23
@@ -734,12 +474,12 @@
         {
           "agent": "codex-low",
           "scores": {
-            "correctness": 4,
+            "correctness": 5,
             "code_quality": 4,
             "robustness": 4,
-            "design": 3,
-            "comprehension": 4,
-            "total": 19
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
           },
           "meta": {
             "agent": "codex",
@@ -753,12 +493,12 @@
         {
           "agent": "codex-medium",
           "scores": {
-            "correctness": 5,
+            "correctness": 3,
             "code_quality": 4,
             "robustness": 4,
             "design": 4,
-            "comprehension": 5,
-            "total": 22
+            "comprehension": 4,
+            "total": 19
           },
           "meta": {
             "agent": "codex",
@@ -767,136 +507,6 @@
             "started_at": "2026-03-16T08:17:47Z",
             "completed_at": "2026-03-16T08:21:00Z",
             "duration_seconds": 193
-          }
-        }
-      ]
-    },
-    {
-      "taskId": "2026-03-16/003-sql-parser",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "codex-high",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 5,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 5,
-            "total": 21
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "high",
-            "started_at": "2026-03-16T08:23:20Z",
-            "completed_at": "2026-03-16T08:32:00Z",
-            "duration_seconds": 520
-          }
-        },
-        {
-          "agent": "codex-low",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "low",
-            "started_at": "2026-03-16T08:23:34Z",
-            "completed_at": "2026-03-16T08:29:00Z",
-            "duration_seconds": 326
-          }
-        },
-        {
-          "agent": "codex-medium",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "medium",
-            "started_at": "2026-03-16T08:23:27Z",
-            "completed_at": "2026-03-16T08:30:00Z",
-            "duration_seconds": 393
-          }
-        }
-      ]
-    },
-    {
-      "taskId": "2026-03-16/004-lisp-interpreter",
-      "judges": [
-        "claude-code"
-      ],
-      "agents": [
-        {
-          "agent": "codex-high",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 4,
-            "design": 4,
-            "comprehension": 4,
-            "total": 20
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "high",
-            "started_at": "2026-03-16T08:32:16Z",
-            "completed_at": "2026-03-16T08:42:00Z",
-            "duration_seconds": 584
-          }
-        },
-        {
-          "agent": "codex-low",
-          "scores": {
-            "correctness": 5,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 20
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "low",
-            "started_at": "2026-03-16T08:32:34Z",
-            "completed_at": "2026-03-16T08:37:00Z",
-            "duration_seconds": 266
-          }
-        },
-        {
-          "agent": "codex-medium",
-          "scores": {
-            "correctness": 4,
-            "code_quality": 4,
-            "robustness": 3,
-            "design": 4,
-            "comprehension": 4,
-            "total": 19
-          },
-          "meta": {
-            "agent": "codex",
-            "model": "GPT-5.4",
-            "effort": "medium",
-            "started_at": "2026-03-16T08:32:24Z",
-            "completed_at": "2026-03-16T08:38:00Z",
-            "duration_seconds": 336
           }
         }
       ]

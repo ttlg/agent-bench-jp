@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 4,
+  "total": 21,
+  "reasoning": "主要要件はほぼ満たしています。to-wareki / to-seireki の両変換、明治〜令和の対応、元年表記、短縮表記、境界日の扱い、不正日付の検証は実装できています。一方で、CLIとしての仕上げは少し甘く、bin を定義しているのに shebang がないため bare な wareki 実行の確実性に不安があります。また --format の不正値や余計な引数を明示的にエラーにせず、npm test が存在しない test/test.js を指しているため、品質と堅牢性は満点評価までは届きません。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:15:00Z",
+  "duration_seconds": 180
+}

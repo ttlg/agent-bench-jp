@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 5,
+  "total": 22,
+  "reasoning": "主要要件はほぼ満たしています。to-wareki/to-seireki の両サブコマンド、明治〜令和の対応、曜日付き出力、--format short、不正日付の検出、改元境界日（1989-01-07/08、2019-04-30/05-01）の処理はいずれも正しく実装されています。外部日付ライブラリも使っていません。一方で、実装は src/wareki.ts の単一ファイルに集約されており、CLI層と変換ロジックが分離されていないため、保守性とテスト容易性はやや落ちます。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T02:59:00Z",
+  "duration_seconds": 180
+}

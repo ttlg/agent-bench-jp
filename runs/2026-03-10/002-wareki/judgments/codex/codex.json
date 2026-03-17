@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 5,
+  "robustness": 5,
+  "design": 4,
+  "comprehension": 5,
+  "total": 24,
+  "reasoning": "要件はほぼ完全に満たしています。to-wareki / to-seireki の両サブコマンド、明治〜令和の対応、ISO入力と和暦入力、曜日付きの出力、--format short、境界日処理、不正日付のエラー処理、自前実装の暦計算が揃っており、境界条件も正しく処理できていました。ビルドも通り、出力も仕様どおりです。実装は cli.ts と変換ロジックが分離されており、命名や責務分割も明快で、異常系メッセージも十分です。減点は設計のみで、拡張性が非常に高い設計とまでは言えません。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:18:00Z",
+  "duration_seconds": 240
+}

@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 5,
+  "total": 22,
+  "reasoning": "主要要件は一通り満たしています。to-wareki/to-seireki の双方向変換、明治〜令和の対応、曜日付き出力、--format short、境界日判定、異常入力時のエラー表示、外部日付ライブラリ不使用はいずれも実装されており、1989-01-07→昭和64年、1989-01-08→平成元年も正しく処理できていました。一方で、コードはsrc/cli.ts 1ファイルに集約されテストもなく、bin が .ts を直接指しているため、Node の実行環境によっては移植性に不安があります。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:05:00Z",
+  "duration_seconds": 150
+}

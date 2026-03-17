@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 4,
+  "total": 20,
+  "reasoning": "主要要件は概ね満たしています。西暦/和暦の相互変換、明治〜令和の対応、元号境界日の処理、不正日付のエラー、短縮表記、曜日表示、外部日付ライブラリ不使用は実装できています。一方で、提出物はそのままでは実行確認しづらく、npm run build は依存未導入環境では tsc 不在で失敗し、テストも dist/wareki.js 前提のため即実行できません。堅牢性も一般的な異常系は押さえているものの、--format の不正値や余分な引数を厳密には弾かない甘さがあります。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-17T03:09:00Z",
+  "duration_seconds": 240
+}
