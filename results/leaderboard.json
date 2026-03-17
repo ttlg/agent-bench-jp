@@ -1,6 +1,6 @@
 {
   "updated": "2026-03-17",
-  "tasks_evaluated": 12,
+  "tasks_evaluated": 13,
   "overall": [
     {
       "rank": 1,
@@ -118,6 +118,19 @@
       "design": 3.5,
       "comprehension": 3.75,
       "total": 16.75
+    },
+    {
+      "rank": 10,
+      "agent": "gemini",
+      "model": "Gemini 3",
+      "effort": "default",
+      "tasks": 1,
+      "correctness": 3,
+      "code_quality": 3,
+      "robustness": 2,
+      "design": 3,
+      "comprehension": 4,
+      "total": 15
     }
   ],
   "tasks": [
@@ -897,6 +910,33 @@
             "started_at": "2026-03-16T08:32:24Z",
             "completed_at": "2026-03-16T08:38:00Z",
             "duration_seconds": 336
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-17/001-cli-tool",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "gemini",
+          "scores": {
+            "correctness": 3,
+            "code_quality": 3,
+            "robustness": 2,
+            "design": 3,
+            "comprehension": 4,
+            "total": 15
+          },
+          "meta": {
+            "agent": "gemini",
+            "model": "Gemini 3",
+            "effort": "default",
+            "started_at": "2026-03-17T06:25:35Z",
+            "completed_at": "2026-03-17T06:28:10Z",
+            "duration_seconds": 155
           }
         }
       ]
