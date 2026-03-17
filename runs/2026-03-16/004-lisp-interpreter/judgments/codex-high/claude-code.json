@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 4,
+  "total": 20,
+  "reasoning": "【正確性 4/5】全テスト合格、要件の主要機能を網羅。dotted pairの正式サポートがない点、andとorがTCO対応でない点で減点。【コード品質 4/5】806行の単一ファイルで見通しよく構成。命名は明確で一貫。コメントやdocstringが皆無な点は減点要素。【堅牢性 4/5】エラー階層が整備され、REPL内のエラー回復、未終端文字列検出等が丁寧。スタックオーバーフロー保護がない点で減点。【設計 4/5】TCOをwhileループ+continue方式で実現しシンプルな設計。構造的に良い。【要件理解 4/5】テスト10関数で主要機能を適切にカバー。エッジケーステストがやや不足。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-17T01:05:00Z",
+  "duration_seconds": 47
+}

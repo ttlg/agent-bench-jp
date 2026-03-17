@@ -1,0 +1,13 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "description": "A tiny SQL parser and query engine for JSON data",
+  "type": "module",
+  "bin": {
+    "jsql": "./bin/jsql"
+  },
+  "scripts": {
+    "jsql": "node --experimental-strip-types src/cli.ts",
+    "test": "node --test --experimental-strip-types test/**/*.test.ts"
+  }
+}

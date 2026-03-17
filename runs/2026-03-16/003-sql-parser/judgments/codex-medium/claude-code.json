@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "【正確性 4/5】SELECT/WHERE/ORDER BY/LIMIT/OFFSET/JOIN/集約関数/GROUP BY/HAVINGを全て実装。テスト5件全パス。LIKEが常にcase-insensitiveな点等で減点。【コード品質 4/5】責務が明確に分離。discriminated unionによる型安全なAST定義、再帰下降パーサー。tsconfig.jsonが無い点は軽微な減点。【堅牢性 3/5】基本的なエラーハンドリングは備えるがテストが5件と少なくエッジケーステストが不足。【設計 4/5】トークナイザ→パーサー→実行エンジン→フォーマッタのパイプライン設計が秀逸。【理解度 4/5】全要件を正確に把握し実装。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-17T01:00:00Z",
+  "duration_seconds": 66
+}

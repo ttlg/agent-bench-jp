@@ -1,0 +1,12 @@
+{
+  "name": "wareki-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "wareki": "./src/cli.ts"
+  },
+  "scripts": {
+    "wareki": "node ./src/cli.ts"
+  }
+}

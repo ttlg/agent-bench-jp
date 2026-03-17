@@ -1,6 +1,6 @@
 {
-  "updated": "2026-03-13",
-  "tasks_evaluated": 8,
+  "updated": "2026-03-17",
+  "tasks_evaluated": 12,
   "overall": [
     {
       "rank": 1,
@@ -43,6 +43,32 @@
     },
     {
       "rank": 4,
+      "agent": "codex-high",
+      "model": "GPT-5.4",
+      "effort": "high",
+      "tasks": 4,
+      "correctness": 4.25,
+      "code_quality": 4.5,
+      "robustness": 3.75,
+      "design": 4,
+      "comprehension": 4.5,
+      "total": 21
+    },
+    {
+      "rank": 5,
+      "agent": "codex-low",
+      "model": "GPT-5.4",
+      "effort": "low",
+      "tasks": 4,
+      "correctness": 4.5,
+      "code_quality": 4.25,
+      "robustness": 3.75,
+      "design": 4,
+      "comprehension": 4.25,
+      "total": 20.75
+    },
+    {
+      "rank": 6,
       "agent": "claude-code-sonnet-high",
       "model": "Sonnet 4.6",
       "effort": "high",
@@ -55,7 +81,20 @@
       "total": 20.25
     },
     {
-      "rank": 5,
+      "rank": 7,
+      "agent": "codex-medium",
+      "model": "GPT-5.4",
+      "effort": "medium",
+      "tasks": 4,
+      "correctness": 4.25,
+      "code_quality": 4.25,
+      "robustness": 3.5,
+      "design": 4,
+      "comprehension": 4.25,
+      "total": 20.25
+    },
+    {
+      "rank": 8,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
@@ -68,7 +107,7 @@
       "total": 20
     },
     {
-      "rank": 6,
+      "rank": 9,
       "agent": "claude-code-low",
       "model": "Opus 4.6",
       "effort": "low",
@@ -598,6 +637,266 @@
             "started_at": "2026-03-14T02:13:38Z",
             "completed_at": "2026-03-14T02:25:17Z",
             "duration_seconds": 699
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-16/001-cli-tool",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "codex-high",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4,
+            "total": 20
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "high",
+            "started_at": "2026-03-16T08:13:58Z",
+            "completed_at": "2026-03-16T08:17:00Z",
+            "duration_seconds": 182
+          }
+        },
+        {
+          "agent": "codex-low",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 5,
+            "robustness": 5,
+            "design": 5,
+            "comprehension": 5,
+            "total": 25
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "low",
+            "started_at": "2026-03-16T08:14:10Z",
+            "completed_at": "2026-03-16T08:16:00Z",
+            "duration_seconds": 110
+          }
+        },
+        {
+          "agent": "codex-medium",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 5,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4,
+            "total": 21
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "medium",
+            "started_at": "2026-03-16T08:14:04Z",
+            "completed_at": "2026-03-16T08:16:30Z",
+            "duration_seconds": 146
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-16/002-wareki",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "codex-high",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 5,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 23
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "high",
+            "started_at": "2026-03-16T08:17:30Z",
+            "completed_at": "2026-03-16T08:22:00Z",
+            "duration_seconds": 270
+          }
+        },
+        {
+          "agent": "codex-low",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 3,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "low",
+            "started_at": "2026-03-16T08:17:55Z",
+            "completed_at": "2026-03-16T08:20:00Z",
+            "duration_seconds": 125
+          }
+        },
+        {
+          "agent": "codex-medium",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "medium",
+            "started_at": "2026-03-16T08:17:47Z",
+            "completed_at": "2026-03-16T08:21:00Z",
+            "duration_seconds": 193
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-16/003-sql-parser",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "codex-high",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 5,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 5,
+            "total": 21
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "high",
+            "started_at": "2026-03-16T08:23:20Z",
+            "completed_at": "2026-03-16T08:32:00Z",
+            "duration_seconds": 520
+          }
+        },
+        {
+          "agent": "codex-low",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "low",
+            "started_at": "2026-03-16T08:23:34Z",
+            "completed_at": "2026-03-16T08:29:00Z",
+            "duration_seconds": 326
+          }
+        },
+        {
+          "agent": "codex-medium",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "medium",
+            "started_at": "2026-03-16T08:23:27Z",
+            "completed_at": "2026-03-16T08:30:00Z",
+            "duration_seconds": 393
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-16/004-lisp-interpreter",
+      "judges": [
+        "claude-code"
+      ],
+      "agents": [
+        {
+          "agent": "codex-high",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4,
+            "total": 20
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "high",
+            "started_at": "2026-03-16T08:32:16Z",
+            "completed_at": "2026-03-16T08:42:00Z",
+            "duration_seconds": 584
+          }
+        },
+        {
+          "agent": "codex-low",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 20
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "low",
+            "started_at": "2026-03-16T08:32:34Z",
+            "completed_at": "2026-03-16T08:37:00Z",
+            "duration_seconds": 266
+          }
+        },
+        {
+          "agent": "codex-medium",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "codex",
+            "model": "GPT-5.4",
+            "effort": "medium",
+            "started_at": "2026-03-16T08:32:24Z",
+            "completed_at": "2026-03-16T08:38:00Z",
+            "duration_seconds": 336
           }
         }
       ]

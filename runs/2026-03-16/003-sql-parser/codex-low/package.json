@@ -1,0 +1,13 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "jsql": "./src/cli.ts"
+  },
+  "scripts": {
+    "jsql": "node src/cli.ts",
+    "test": "node --test test/**/*.test.ts"
+  }
+}

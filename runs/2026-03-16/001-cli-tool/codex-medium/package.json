@@ -1,0 +1,15 @@
+{
+  "name": "lc-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "lc": "./src/cli.ts"
+  },
+  "scripts": {
+    "lc": "node --experimental-strip-types ./src/cli.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

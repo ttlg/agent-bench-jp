@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "【正確性 4/5】全6テスト合格。全SQL句対応。SELECT DISTINCTが空オブジェクトを返す、IS NULL未実装が減点要因。【コード品質 4/5】責務分離が明確、型定義も的確。CLIのエラーハンドリングが未整備。【堅牢性 3/5】CLIにtry-catchなく生スタックトレース表示、入力データ型バリデーションなし、エッジケーステスト不足。【設計 4/5】教科書的なコンパイラパイプライン。RowContextによるJOIN処理は巧み。【理解度 4/5】SQLセマンティクスの理解が深く、全要件を正確に実装。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-17T01:01:00Z",
+  "duration_seconds": 72
+}

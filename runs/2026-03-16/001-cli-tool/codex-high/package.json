@@ -1,0 +1,12 @@
+{
+  "name": "lc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "lc": "./bin/lc.js"
+  },
+  "scripts": {
+    "lc": "node ./bin/lc.js"
+  }
+}

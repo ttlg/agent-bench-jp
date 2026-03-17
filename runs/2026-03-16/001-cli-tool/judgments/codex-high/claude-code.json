@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 4,
+  "total": 20,
+  "reasoning": "正確性: コマンド名lc、ディレクトリ引数(省略時カレント)、--ext/--sort/--totalオプション、隠しファイル・node_modules除外、bin/scriptsによるnpx/npm script実行可能と、明示要求を全て満たしている。空ファイルやCRLF正規化も対応。ただしtsconfig.jsonがなく型チェックが不完全、--ext値に拡張子なしファイルのフィルタ考慮なし等の細かい点あり。コード品質: 型定義・関数分離・命名規則が一貫しており読みやすい。過度な抽象化もなく適切。堅牢性: ディレクトリ不在、非ディレクトリパス、--ext値欠落、未知オプション等のエラー処理あり。トップレベルcatchも実装。ただしバイナリファイル読み込み時のエラーやシンボリックリンク循環等の想定外ケースは未対応。設計: --experimental-strip-typesによるビルドレス実行は合理的だがNode.js v22.6+依存。bin/lc.jsでのspawnラッパーは適切。依存パッケージゼロは好印象。指示理解: 全明示要求を正確に実装。wc -l風の右寄せフォーマットやソート時の二次キー(ファイル名)等、暗黙の意図も汲んでいるが、--helpの追加は要件外で若干の過剰実装。",
+  "judge": "claude-code (Opus 4.6)",
+  "judged_at": "2026-03-16T09:28:00Z",
+  "duration_seconds": 40
+}
