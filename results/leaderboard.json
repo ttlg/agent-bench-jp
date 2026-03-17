@@ -1,6 +1,6 @@
 {
   "updated": "2026-03-17",
-  "tasks_evaluated": 13,
+  "tasks_evaluated": 16,
   "overall": [
     {
       "rank": 1,
@@ -124,13 +124,13 @@
       "agent": "gemini",
       "model": "Gemini 3",
       "effort": "default",
-      "tasks": 1,
-      "correctness": 3,
+      "tasks": 4,
+      "correctness": 3.5,
       "code_quality": 3,
-      "robustness": 2,
-      "design": 3,
-      "comprehension": 4,
-      "total": 15
+      "robustness": 2.5,
+      "design": 3.25,
+      "comprehension": 3.75,
+      "total": 16
     }
   ],
   "tasks": [
@@ -937,6 +937,87 @@
             "started_at": "2026-03-17T06:25:35Z",
             "completed_at": "2026-03-17T06:28:10Z",
             "duration_seconds": 155
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-17/002-wareki",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "gemini",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 3,
+            "robustness": 3,
+            "design": 3,
+            "comprehension": 4,
+            "total": 17
+          },
+          "meta": {
+            "agent": "gemini",
+            "model": "Gemini 3",
+            "effort": "default",
+            "started_at": "2026-03-17T06:31:52Z",
+            "completed_at": "2026-03-17T06:37:30Z",
+            "duration_seconds": 338
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-17/003-sql-parser",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "gemini",
+          "scores": {
+            "correctness": 3,
+            "code_quality": 3,
+            "robustness": 2,
+            "design": 3,
+            "comprehension": 3,
+            "total": 14
+          },
+          "meta": {
+            "agent": "gemini",
+            "model": "Gemini 3",
+            "effort": "default",
+            "started_at": "2026-03-17T06:43:51Z",
+            "completed_at": "2026-03-17T06:49:30Z",
+            "duration_seconds": 339
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-17/004-lisp-interpreter",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "gemini",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 3,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 18
+          },
+          "meta": {
+            "agent": "gemini",
+            "model": "Gemini 3",
+            "effort": "default",
+            "started_at": "2026-03-17T06:49:58Z",
+            "completed_at": "2026-03-17T06:57:00Z",
+            "duration_seconds": 422
           }
         }
       ]
