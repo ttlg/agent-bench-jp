@@ -71,6 +71,13 @@ section h2::before{content:'';display:inline-block;width:4px;height:20px;
 .score-track{flex:1;height:8px;border-radius:4px;background:var(--bar-bg)}
 .score-num{min-width:20px;text-align:right;font-weight:500}
 
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:6px 16px;border-radius:6px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text-muted);cursor:pointer;font-size:.85rem;
+  transition:all .2s ease}
+.filter-btn:hover{border-color:var(--accent);color:var(--text)}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 .loading{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:1.1rem}
 .error{text-align:center;padding:40px 20px;color:#f85149;font-size:1rem}
 
@@ -124,24 +131,65 @@ function renderScoreBar(val,max=5,color='var(--accent)'){
     <span class="score-val">${val}</span></div>`;
 }
 
+function agentFamily(name){return name.startsWith('claude-code')?'claude-code':'codex'}
+
+let _data=null;
+let _currentFilter='all';
+
+function applyFilter(filter){
+  _currentFilter=filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));
+  // Filter leaderboard rows
+  document.querySelectorAll('.lb-table tbody tr').forEach(tr=>{
+    if(filter==='all'){tr.style.display='';return}
+    tr.style.display=tr.dataset.family===filter?'':'none';
+  });
+  // Rebuild radar chart
+  if(_data)drawOverallRadar(_data,filter);
+}
+
+function drawOverallRadar(data,filter){
+  const ctxO=document.getElementById('radarOverall');
+  if(!ctxO)return;
+  if(window._overallChart)window._overallChart.destroy();
+  const filtered=filter==='all'?data.overall:data.overall.filter(r=>agentFamily(r.agent)===filter);
+  window._overallChart=new Chart(ctxO,{type:'radar',data:{
+    labels:DIMENSIONS.map(d=>DIM_JA[d]),
+    datasets:filtered.map(r=>{const c=agentColor(r.agent);return{
+      label:agentLabel(r.agent,r.model,r.effort),
+      data:DIMENSIONS.map(d=>r[d]),
+      borderColor:c,backgroundColor:c+'22',
+      borderWidth:2,pointRadius:3,pointBackgroundColor:c
+    }})
+  },options:radarOpts()});
+}
+
 function render(data){
+  _data=data;
   document.getElementById('updated').textContent=`最終更新: ${data.updated} ｜ 評価タスク数: ${data.tasks_evaluated || data.tasks?.length||'—'}`;
 
   let html='';
 
-  // Overall leaderboard
-  html+=`<section><h2>総合リーダーボード</h2><div style="overflow-x:auto"><table class="lb-table">
-    <tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
+  // Overall leaderboard with filter
+  html+=`<section><h2>総合リーダーボード</h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all" onclick="applyFilter('all')">すべて</button>
+      <button class="filter-btn" data-filter="codex" onclick="applyFilter('codex')">Codex</button>
+      <button class="filter-btn" data-filter="claude-code" onclick="applyFilter('claude-code')">Claude Code</button>
+    </div>
+    <div style="overflow-x:auto"><table class="lb-table">
+    <thead><tr><th>順位</th><th>エージェント</th><th>タスク数</th>`;
   DIMENSIONS.forEach(d=>{html+=`<th>${DIM_JA[d]}</th>`});
-  html+=`<th>合計</th></tr>`;
+  html+=`<th>合計</th></tr></thead><tbody>`;
   data.overall.forEach((r,ri)=>{
     const rc=r.rank<=3?` rank-${r.rank}`:'';
     const label=agentLabel(r.agent,r.model,r.effort);
-    html+=`<tr><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td><td>${r.tasks}</td>`;
+    const family=agentFamily(r.agent);
+    html+=`<tr data-family="${family}"><td class="rank${rc}">${r.rank}</td><td class="agent-name">${label}</td><td>${r.tasks}</td>`;
     DIMENSIONS.forEach((d,i)=>{html+=`<td>${renderScoreBar(r[d],5,agentColor(r.agent))}</td>`});
     html+=`<td class="total-cell">${r.total}</td></tr>`;
   });
-  html+=`</table></div></section>`;
+  html+=`</tbody></table></div></section>`;
 
   // Radar chart section
   html+=`<section><h2>総合スコア比較</h2><div style="max-width:480px;margin:0 auto"><canvas id="radarOverall"></canvas></div></section>`;
@@ -170,7 +218,7 @@ function render(data){
       <div class="task-content">
         <div class="chart-wrap"><canvas id="radar-${ti}"></canvas></div>
         <div>`;
-    sortAgents(t.agents).forEach(a=>{
+    [...t.agents].sort((a,b)=>b.scores.total-a.scores.total).forEach(a=>{
       const ac=agentColor(a.agent);
       const aLabel=agentLabel(a.agent,a.meta?.model,a.meta?.effort);
       html+=`<div class="agent-detail">
@@ -195,18 +243,7 @@ function render(data){
   document.getElementById('app').innerHTML=html;
 
   // Draw overall radar
-  const ctxO=document.getElementById('radarOverall');
-  if(ctxO){
-    new Chart(ctxO,{type:'radar',data:{
-      labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:data.overall.map(r=>{const c=agentColor(r.agent);return{
-        label:agentLabel(r.agent,r.model,r.effort),
-        data:DIMENSIONS.map(d=>r[d]),
-        borderColor:c,backgroundColor:c+'22',
-        borderWidth:2,pointRadius:3,pointBackgroundColor:c
-      }})
-    },options:radarOpts()});
-  }
+  drawOverallRadar(data,'all');
 
   // Draw per-task radars
   mergedTasks.forEach((t,ti)=>{
@@ -214,7 +251,7 @@ function render(data){
     if(!ctx)return;
     new Chart(ctx,{type:'radar',data:{
       labels:DIMENSIONS.map(d=>DIM_JA[d]),
-      datasets:sortAgents(t.agents).map(a=>{const c=agentColor(a.agent);return{
+      datasets:[...t.agents].sort((a,b)=>b.scores.total-a.scores.total).map(a=>{const c=agentColor(a.agent);return{
         label:agentLabel(a.agent,a.meta?.model,a.meta?.effort),
         data:DIMENSIONS.map(d=>a.scores[d]),
         borderColor:c,backgroundColor:c+'22',
