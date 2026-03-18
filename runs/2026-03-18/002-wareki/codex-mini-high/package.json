@@ -1,0 +1,16 @@
+{
+  "name": "wareki-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "bin": {
+    "wareki": "./dist/wareki.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "wareki": "npm run build && node dist/wareki.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0"
+  }
+}

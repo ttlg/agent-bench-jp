@@ -1,0 +1,14 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiny SQL-like CLI for querying JSON data",
+  "type": "module",
+  "bin": {
+    "jsql": "./bin/jsql"
+  },
+  "scripts": {
+    "test": "node --test",
+    "jsql": "node ./bin/jsql"
+  }
+}

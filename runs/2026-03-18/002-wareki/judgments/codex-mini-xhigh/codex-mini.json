@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 5,
+  "comprehension": 5,
+  "total": 23,
+  "reasoning": "要件の主要部分はすべて実装されており、npm test と npm run build も通過しました。西暦↔和暦変換、元号境界、短縮表記、曜日付与、無効日付の検出、bin/npm script 構成まで揃っています。軽微な減点として、--format が to-seireki でも受け付けられるなどCLI引数制約がやや緩く、エラーメッセージや入力形式の厳密さに少し余地があります。",
+  "judge": "codex (gpt-5.4-mini, high)",
+  "judged_at": "2026-03-18T01:22:13Z",
+  "duration_seconds": 90
+}

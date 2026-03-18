@@ -1,0 +1,16 @@
+{
+  "name": "lc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "lc": "./src/cli.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lc": "node src/cli.ts",
+    "start": "node src/cli.ts"
+  }
+}

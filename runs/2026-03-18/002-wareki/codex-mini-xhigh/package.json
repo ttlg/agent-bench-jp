@@ -1,0 +1,21 @@
+{
+  "name": "wareki",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "./dist/cli.js",
+  "bin": {
+    "wareki": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prewareki": "npm run build",
+    "wareki": "node dist/cli.js",
+    "pretest": "npm run build",
+    "test": "node --test dist/calendar.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
+  }
+}

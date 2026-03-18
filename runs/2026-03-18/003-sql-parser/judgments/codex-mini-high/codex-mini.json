@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 2,
+  "design": 4,
+  "comprehension": 4,
+  "total": 17,
+  "reasoning": "npm test は通っており、SELECT / WHERE / JOIN / GROUP BY / HAVING / LIMIT-OFFSET / CLI まで一通り実装されています。実装も parser / executor / formatter / CLI に分かれていて読みやすいです。一方で SQL 仕様としては穴があります。LIKE は % のみで _ を扱わず、SELECT 列の別名を ORDER BY で参照できません。さらに未知の列参照をエラーにせず null 扱いにしており、未終了のブロックコメントも明確に失敗しません。要件の大枠は満たすが、細部の正しさと堅牢性は中程度です。",
+  "judge": "codex (gpt-5.4-mini, high)",
+  "judged_at": "2026-03-18T01:44:55Z",
+  "duration_seconds": 120
+}
