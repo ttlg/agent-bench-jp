@@ -106,7 +106,7 @@ const AGENT_COLORS = {'codex':'#58a6ff','claude-code':'#3fb950','gemini':'#f0c04
 const AGENT_ORDER = ['codex','claude-code'];
 const DIMENSIONS = ['correctness','code_quality','robustness','design','comprehension'];
 const DIM_JA = {correctness:'正確性',code_quality:'コード品質',robustness:'堅牢性',design:'設計',comprehension:'理解力'};
-function agentColor(name){return AGENT_COLORS[name]||COLORS[Object.keys(AGENT_COLORS).length%COLORS.length]}
+function agentColor(name){return AGENT_COLORS[name]||AGENT_COLORS[agentFamily(name)]||COLORS[Object.keys(AGENT_COLORS).length%COLORS.length]}
 function sortAgents(agents){return [...agents].sort((a,b)=>{
   const ai=AGENT_ORDER.indexOf(a.agent??a),bi=AGENT_ORDER.indexOf(b.agent??b);
   return (ai===-1?99:ai)-(bi===-1?99:bi);
