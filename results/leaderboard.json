@@ -1,9 +1,21 @@
 {
-  "updated": "2026-03-17",
-  "tasks_evaluated": 16,
+  "updated": "2026-03-18",
+  "tasks_evaluated": 19,
   "overall": [
     {
       "rank": 1,
+      "agent": "codex-mini-xhigh",
+      "effort": "xhigh",
+      "tasks": 3,
+      "correctness": 4.33,
+      "code_quality": 4,
+      "robustness": 4,
+      "design": 4.33,
+      "comprehension": 5,
+      "total": 21.67
+    },
+    {
+      "rank": 2,
       "agent": "codex",
       "model": "GPT-5.4",
       "effort": "xhigh",
@@ -16,7 +28,7 @@
       "total": 21.5
     },
     {
-      "rank": 2,
+      "rank": 3,
       "agent": "claude-code",
       "model": "Opus 4.6",
       "effort": "max",
@@ -29,7 +41,7 @@
       "total": 20
     },
     {
-      "rank": 3,
+      "rank": 4,
       "agent": "claude-code-high",
       "model": "Opus 4.6",
       "effort": "high",
@@ -42,7 +54,19 @@
       "total": 19.75
     },
     {
-      "rank": 4,
+      "rank": 5,
+      "agent": "codex-mini-high",
+      "effort": "high",
+      "tasks": 3,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.33,
+      "design": 4,
+      "comprehension": 4.33,
+      "total": 19.67
+    },
+    {
+      "rank": 6,
       "agent": "codex-high",
       "model": "GPT-5.4",
       "effort": "high",
@@ -55,7 +79,7 @@
       "total": 19.5
     },
     {
-      "rank": 5,
+      "rank": 7,
       "agent": "claude-code-opus-4.6-high-1m",
       "model": "Opus 4.6",
       "effort": "high",
@@ -68,7 +92,7 @@
       "total": 19.5
     },
     {
-      "rank": 6,
+      "rank": 8,
       "agent": "claude-code-sonnet-high",
       "model": "Sonnet 4.6",
       "effort": "high",
@@ -81,7 +105,7 @@
       "total": 19
     },
     {
-      "rank": 7,
+      "rank": 9,
       "agent": "claude-code-medium",
       "model": "Opus 4.6",
       "effort": "medium",
@@ -94,7 +118,7 @@
       "total": 18.75
     },
     {
-      "rank": 8,
+      "rank": 10,
       "agent": "codex-medium",
       "model": "GPT-5.4",
       "effort": "medium",
@@ -107,7 +131,7 @@
       "total": 18
     },
     {
-      "rank": 9,
+      "rank": 11,
       "agent": "codex-low",
       "model": "GPT-5.4",
       "effort": "low",
@@ -120,7 +144,7 @@
       "total": 17.75
     },
     {
-      "rank": 10,
+      "rank": 12,
       "agent": "claude-code-low",
       "model": "Opus 4.6",
       "effort": "low",
@@ -133,7 +157,7 @@
       "total": 16.75
     },
     {
-      "rank": 11,
+      "rank": 13,
       "agent": "gemini",
       "model": "Gemini 3.1 Preview",
       "effort": "default",
@@ -1107,6 +1131,138 @@
             "started_at": "2026-03-17T06:49:58Z",
             "completed_at": "2026-03-17T06:57:00Z",
             "duration_seconds": 422
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-18/001-cli-tool",
+      "judges": [
+        "codex-mini"
+      ],
+      "agents": [
+        {
+          "agent": "codex-mini-high",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 22
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "high",
+            "started_at": "2026-03-18T02:04:27+09:00",
+            "completed_at": "2026-03-18T02:06:27+09:00",
+            "duration_seconds": 120
+          }
+        },
+        {
+          "agent": "codex-mini-xhigh",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 21
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "xhigh",
+            "started_at": "2026-03-18T00:59:42Z",
+            "completed_at": "2026-03-18T01:03:42Z",
+            "duration_seconds": 240
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-18/002-wareki",
+      "judges": [
+        "codex-mini"
+      ],
+      "agents": [
+        {
+          "agent": "codex-mini-high",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 4,
+            "total": 20
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "high",
+            "started_at": "2026-03-18T01:17:12Z",
+            "completed_at": "2026-03-18T01:20:12Z",
+            "duration_seconds": 180
+          }
+        },
+        {
+          "agent": "codex-mini-xhigh",
+          "scores": {
+            "correctness": 5,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 5,
+            "comprehension": 5,
+            "total": 23
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "xhigh",
+            "started_at": "2026-03-18T01:10:02Z",
+            "completed_at": "2026-03-18T01:15:02Z",
+            "duration_seconds": 300
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-18/003-sql-parser",
+      "judges": [
+        "codex-mini"
+      ],
+      "agents": [
+        {
+          "agent": "codex-mini-high",
+          "scores": {
+            "correctness": 3,
+            "code_quality": 4,
+            "robustness": 2,
+            "design": 4,
+            "comprehension": 4,
+            "total": 17
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "high",
+            "started_at": "2026-03-18T01:37:21Z",
+            "completed_at": "2026-03-18T01:42:21Z",
+            "duration_seconds": 300
+          }
+        },
+        {
+          "agent": "codex-mini-xhigh",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 4,
+            "design": 4,
+            "comprehension": 5,
+            "total": 21
+          },
+          "meta": {
+            "agent": "codex (gpt-5.4-mini)",
+            "effort": "xhigh",
+            "started_at": "2026-03-18T01:23:30Z",
+            "completed_at": "2026-03-18T01:36:30Z",
+            "duration_seconds": 780
           }
         }
       ]
