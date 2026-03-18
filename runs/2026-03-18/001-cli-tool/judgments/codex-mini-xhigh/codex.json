@@ -1,0 +1,12 @@
+{
+  "correctness": 5,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 4,
+  "comprehension": 5,
+  "total": 22,
+  "reasoning": "要件は概ね満たしています。src/cli.ts でディレクトリ再帰走査、拡張子フィルタ、行数集計、--sort、--total、隠しファイルと node_modules の除外を実装しており、package.json の npm script と bin/lc も用意されています。簡単な実行確認でも、通常実行・--ext ts --sort --total・--help は期待通り動作しました。コードは関数分割と命名が明快で読みやすいです。一方で、テストが無いこと、ファイル読み取り失敗時に全体が終了すること、実行が node --experimental-strip-types 前提で環境依存性がややあることから、堅牢性と設計は満点より一段下げました。",
+  "judge": "codex (gpt-5.4, high)",
+  "judged_at": "2026-03-18T02:06:09Z",
+  "duration_seconds": 120
+}

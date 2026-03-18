@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "主要機能は広く実装されており、整数/浮動小数点/文字列/真偽値/シンボル/リスト/nil、define/lambda/if/cond/let/let*/begin/quote/set!/define-macro、クロージャ、REPL、quasiquote/unquote/splicing、pytestテストまで揃っている。手動確認では基本評価、マクロ、quasiquote、クロージャ、if 経由の深い末尾再帰は動作した。一方で TCO は完全ではなく、cond のような末尾再帰で RecursionError になり、要求された末尾呼び出し最適化を満額では満たしていない。また特殊形式の引数検証が甘く、不正入力を黙って受理するため堅牢性は下がる。",
+  "judge": "codex (gpt-5.4, high)",
+  "judged_at": "2026-03-18T02:11:49Z",
+  "duration_seconds": 210
+}

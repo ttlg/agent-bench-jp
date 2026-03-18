@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 4,
+  "design": 3,
+  "comprehension": 3,
+  "total": 17,
+  "reasoning": "中核の変換ロジックは概ね正しく、明治・大正・昭和・平成・令和の開始日を持ち、元号境界日や不正日付も適切に検証できています。npm test も通過し、外部ライブラリも実質未使用です。一方で、CLIの既定出力が課題仕様から外れており、to-wareki が 令和8年3月10日 ではなく曜日付き、to-seireki も 2026-03-10 ではなく英語曜日付きで出力します。これはベンチマーク観点では仕様不一致として大きい減点です。",
+  "judge": "codex (gpt-5.4, high)",
+  "judged_at": "2026-03-18T02:06:13Z",
+  "duration_seconds": 120
+}

@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 3,
+  "robustness": 2,
+  "design": 3,
+  "comprehension": 4,
+  "total": 15,
+  "reasoning": "主要機能は一通り自前実装されており、提出物自身の npm test は全件通過した。SELECT/WHERE/ORDER BY/LIMIT/JOIN/GROUP BY/HAVING/集約/LIKE の基本ケースは動く。一方で正しさと堅牢性に重要な欠点がある。OFFSET は LIMIT なしで使えず失敗する。LIKE は % のみ対応で _ ワイルドカードを解釈しない。未知列・未知修飾列をエラーにせず null/undefined 扱いで静かに進む。さらに SELECT name, COUNT(*) FROM users のような非 GROUP BY 列と集約の混在を許し、先頭行の値を返してしまうため SQL 的に不正な問い合わせを誤って受理する。設計は tokenizer/parser/evaluator に分かれていて理解しやすいが、src/sql.ts が 1500 行超の単一ファイルで、未使用の重複実装も残っており、品質面は中程度と判断した。",
+  "judge": "codex (gpt-5.4, high)",
+  "judged_at": "2026-03-18T02:10:04Z",
+  "duration_seconds": 120
+}

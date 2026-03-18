@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 19,
+  "reasoning": "主要要件は一通り実装されており、外部SQLパーサーも使っていません。npm test は成功し、SELECT/WHERE/ORDER BY/LIMIT/OFFSET/JOIN/GROUP BY/HAVING/集約/LIKE/CLI統合の12件が通過しました。実装も tokenizer/parser/executor/formatter に素直に分割されていて読みやすいです。一方で堅牢性と厳密な正しさには弱さがあり、LIKE は % のみで _ ワイルドカードを扱えず、存在しない列参照がエラーではなく null になって静かに通ります。また末尾セミコロンや quoted identifier など一般的なSQL入力には対応しておらず、NodeのTypeScript実行機能に依存した最小構成で移植性も高くありません。",
+  "judge": "codex (gpt-5.4, high)",
+  "judged_at": "2026-03-18T02:11:38Z",
+  "duration_seconds": 210
+}
