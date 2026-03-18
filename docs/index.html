@@ -102,7 +102,7 @@ footer{text-align:center;padding:32px 0;color:var(--text-muted);font-size:.8rem;
 
 <script>
 const COLORS = ['#58a6ff','#3fb950','#d2a8ff','#f0c040','#f47067','#79c0ff','#a5d6ff'];
-const AGENT_COLORS = {'codex':'#58a6ff','claude-code':'#3fb950'};
+const AGENT_COLORS = {'codex':'#58a6ff','claude-code':'#3fb950','gemini':'#f0c040'};
 const AGENT_ORDER = ['codex','claude-code'];
 const DIMENSIONS = ['correctness','code_quality','robustness','design','comprehension'];
 const DIM_JA = {correctness:'正確性',code_quality:'コード品質',robustness:'堅牢性',design:'設計',comprehension:'理解力'};
@@ -137,7 +137,7 @@ function renderScoreBar(val,max=5,color='var(--accent)'){
     <span class="score-val">${val}</span></div>`;
 }
 
-function agentFamily(name){return name.startsWith('claude-code')?'claude-code':'codex'}
+function agentFamily(name){if(name.startsWith('claude-code'))return'claude-code';if(name.startsWith('gemini'))return'gemini';return'codex'}
 
 let _data=null;
 let _mergedTasks=null;
@@ -211,6 +211,7 @@ function render(data){
       <button class="filter-btn active" data-filter="all" onclick="applyFilter('all')">すべて</button>
       <button class="filter-btn" data-filter="codex" onclick="applyFilter('codex')">Codex</button>
       <button class="filter-btn" data-filter="claude-code" onclick="applyFilter('claude-code')">Claude Code</button>
+      <button class="filter-btn" data-filter="gemini" onclick="applyFilter('gemini')">Gemini</button>
     </div>
     <div style="overflow-x:auto"><table class="lb-table">`;
   // Build per-agent per-task score map and unique task names

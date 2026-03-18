@@ -69,7 +69,7 @@
     },
     {
       "rank": 6,
-      "agent": "codex-mini-high",
+      "agent": "codex-5.4-mini-high",
       "effort": "high",
       "tasks": 4,
       "correctness": 4,
@@ -107,7 +107,7 @@
     },
     {
       "rank": 9,
-      "agent": "codex-mini-xhigh",
+      "agent": "codex-5.4-mini-xhigh",
       "effort": "xhigh",
       "tasks": 4,
       "correctness": 3.75,
@@ -1142,7 +1142,7 @@
       ],
       "agents": [
         {
-          "agent": "codex-mini-high",
+          "agent": "codex-5.4-mini-high",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
@@ -1160,7 +1160,7 @@
           }
         },
         {
-          "agent": "codex-mini-xhigh",
+          "agent": "codex-5.4-mini-xhigh",
           "scores": {
             "correctness": 5,
             "code_quality": 4,
@@ -1186,7 +1186,7 @@
       ],
       "agents": [
         {
-          "agent": "codex-mini-high",
+          "agent": "codex-5.4-mini-high",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
@@ -1204,7 +1204,7 @@
           }
         },
         {
-          "agent": "codex-mini-xhigh",
+          "agent": "codex-5.4-mini-xhigh",
           "scores": {
             "correctness": 3,
             "code_quality": 4,
@@ -1230,7 +1230,7 @@
       ],
       "agents": [
         {
-          "agent": "codex-mini-high",
+          "agent": "codex-5.4-mini-high",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
@@ -1248,7 +1248,7 @@
           }
         },
         {
-          "agent": "codex-mini-xhigh",
+          "agent": "codex-5.4-mini-xhigh",
           "scores": {
             "correctness": 3,
             "code_quality": 3,
@@ -1274,7 +1274,7 @@
       ],
       "agents": [
         {
-          "agent": "codex-mini-high",
+          "agent": "codex-5.4-mini-high",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
@@ -1292,7 +1292,7 @@
           }
         },
         {
-          "agent": "codex-mini-xhigh",
+          "agent": "codex-5.4-mini-xhigh",
           "scores": {
             "correctness": 4,
             "code_quality": 4,
