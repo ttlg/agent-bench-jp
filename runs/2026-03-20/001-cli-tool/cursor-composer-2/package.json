@@ -1,0 +1,22 @@
+{
+  "name": "lc-cli",
+  "version": "1.0.0",
+  "description": "Line count CLI for files in a directory",
+  "type": "module",
+  "bin": {
+    "lc": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "lc": "node dist/cli.js",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  }
+}
