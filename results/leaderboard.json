@@ -1,6 +1,6 @@
 {
   "updated": "2026-03-20",
-  "tasks_evaluated": 22,
+  "tasks_evaluated": 24,
   "overall": [
     {
       "rank": 1,
@@ -30,19 +30,6 @@
     },
     {
       "rank": 3,
-      "agent": "cursor-composer-2",
-      "model": "Cursor Composer 2",
-      "effort": "default",
-      "tasks": 2,
-      "correctness": 4,
-      "code_quality": 4,
-      "robustness": 3.5,
-      "design": 4,
-      "comprehension": 4.5,
-      "total": 20
-    },
-    {
-      "rank": 4,
       "agent": "claude-code-high",
       "model": "Opus 4.6",
       "effort": "high",
@@ -51,6 +38,19 @@
       "code_quality": 4,
       "robustness": 3.25,
       "design": 3.75,
+      "comprehension": 4.5,
+      "total": 19.75
+    },
+    {
+      "rank": 4,
+      "agent": "cursor-composer-2",
+      "model": "Cursor Composer 2",
+      "effort": "default",
+      "tasks": 4,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.25,
+      "design": 4,
       "comprehension": 4.5,
       "total": 19.75
     },
@@ -1374,6 +1374,60 @@
             "started_at": "2026-03-20T06:18:45Z",
             "completed_at": "2026-03-20T06:23:14Z",
             "duration_seconds": 269
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-20/003-sql-parser",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "cursor-composer-2",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 5,
+            "total": 20
+          },
+          "meta": {
+            "agent": "cursor-composer-2",
+            "model": "Cursor Composer 2",
+            "effort": "default",
+            "started_at": "2026-03-20T06:28:25Z",
+            "completed_at": "2026-03-20T06:33:46Z",
+            "duration_seconds": 321
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-20/004-lisp-interpreter",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "cursor-composer-2",
+          "scores": {
+            "correctness": 4,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 19
+          },
+          "meta": {
+            "agent": "cursor-composer-2",
+            "model": "Cursor Composer 2",
+            "effort": "default",
+            "started_at": "2026-03-20T06:29:50Z",
+            "completed_at": "2026-03-20T06:38:50Z",
+            "duration_seconds": 540
           }
         }
       ]

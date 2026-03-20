@@ -1,0 +1,12 @@
+{
+  "correctness": 4,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 5,
+  "total": 20,
+  "reasoning": "要件で明示された主要機能は概ね実装されており、npm test は14件すべて通過、ビルドも成功しました。lexer/parser/AST/executor/CLI/formatter に分かれた構成で、外部SQLパーサー不使用、大小文字非依存、JOIN/WHERE/GROUP BY/HAVING/LIKE/LIMIT/OFFSET/JSON出力まで揃っています。一方で ORDER BY は投影されていない列で正しく並び替えられず、HAVINGでSELECT別名を使うと誤った評価になり、JOIN時の曖昧な列名もエラーにせず先頭一致で解決します。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-20T06:38:00Z",
+  "duration_seconds": 240
+}

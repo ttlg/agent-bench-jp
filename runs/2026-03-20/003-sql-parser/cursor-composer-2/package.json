@@ -1,0 +1,23 @@
+{
+  "name": "jsql",
+  "version": "1.0.0",
+  "description": "SQL parser and execution engine over JSON tables",
+  "type": "module",
+  "bin": {
+    "jsql": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "jsql": "node dist/cli.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
