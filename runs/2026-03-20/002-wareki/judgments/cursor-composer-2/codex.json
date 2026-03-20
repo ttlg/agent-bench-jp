@@ -1,0 +1,12 @@
+{
+  "correctness": 3,
+  "code_quality": 4,
+  "robustness": 3,
+  "design": 4,
+  "comprehension": 4,
+  "total": 18,
+  "reasoning": "主要機能は実装されており、to-wareki/to-seireki、短縮表記、不正日付判定、元号境界日の基本動作は確認できた。構成も calendar・eras・wareki・cli に分かれていて読みやすい。一方で、長い和暦出力が 平成元年 ではなく 平成1年 になっており、入力でも 平成元年1月8日 を受け付けないため、元年表記の扱いが未達。自動テストも見当たらない。",
+  "judge": "codex (GPT-5.4 high)",
+  "judged_at": "2026-03-20T06:26:00Z",
+  "duration_seconds": 180
+}

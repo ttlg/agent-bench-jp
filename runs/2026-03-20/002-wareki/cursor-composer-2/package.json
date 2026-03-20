@@ -1,0 +1,22 @@
+{
+  "name": "wareki-cli",
+  "version": "1.0.0",
+  "description": "Western calendar ↔ Japanese era (wareki) CLI",
+  "type": "module",
+  "bin": {
+    "wareki": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "wareki": "node dist/cli.js",
+    "prepare": "npm run build",
+    "prepack": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  }
+}

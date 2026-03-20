@@ -1,22 +1,9 @@
 {
   "updated": "2026-03-20",
-  "tasks_evaluated": 21,
+  "tasks_evaluated": 22,
   "overall": [
     {
       "rank": 1,
-      "agent": "cursor-composer-2",
-      "model": "Cursor Composer 2",
-      "effort": "default",
-      "tasks": 1,
-      "correctness": 5,
-      "code_quality": 4,
-      "robustness": 4,
-      "design": 4,
-      "comprehension": 5,
-      "total": 22
-    },
-    {
-      "rank": 2,
       "agent": "codex",
       "model": "GPT-5.4",
       "effort": "xhigh",
@@ -29,7 +16,7 @@
       "total": 21.5
     },
     {
-      "rank": 3,
+      "rank": 2,
       "agent": "claude-code",
       "model": "Opus 4.6",
       "effort": "max",
@@ -37,6 +24,19 @@
       "correctness": 4.25,
       "code_quality": 4,
       "robustness": 3.25,
+      "design": 4,
+      "comprehension": 4.5,
+      "total": 20
+    },
+    {
+      "rank": 3,
+      "agent": "cursor-composer-2",
+      "model": "Cursor Composer 2",
+      "effort": "default",
+      "tasks": 2,
+      "correctness": 4,
+      "code_quality": 4,
+      "robustness": 3.5,
       "design": 4,
       "comprehension": 4.5,
       "total": 20
@@ -1347,6 +1347,33 @@
             "started_at": "2026-03-20T06:10:12Z",
             "completed_at": "2026-03-20T06:15:04Z",
             "duration_seconds": 292
+          }
+        }
+      ]
+    },
+    {
+      "taskId": "2026-03-20/002-wareki",
+      "judges": [
+        "codex"
+      ],
+      "agents": [
+        {
+          "agent": "cursor-composer-2",
+          "scores": {
+            "correctness": 3,
+            "code_quality": 4,
+            "robustness": 3,
+            "design": 4,
+            "comprehension": 4,
+            "total": 18
+          },
+          "meta": {
+            "agent": "cursor-composer-2",
+            "model": "Cursor Composer 2",
+            "effort": "default",
+            "started_at": "2026-03-20T06:18:45Z",
+            "completed_at": "2026-03-20T06:23:14Z",
+            "duration_seconds": 269
           }
         }
       ]
